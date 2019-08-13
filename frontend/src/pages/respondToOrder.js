@@ -3,7 +3,7 @@ import { PageHeader } from 'antd';
 
 function RespondToOrder() {
   return (
-    <PageHeader title="Respond to order"/>
+    <div>Respond to order content</div>
   );
 }
 
