@@ -1,0 +1,3 @@
+[submodule "contracts/ontology"]
+	path = contracts/ontology
+	url = https://github.com/akorunska/ontology_atomic_swap.git
