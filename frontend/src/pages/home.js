@@ -4,7 +4,7 @@ import { PageHeader } from 'antd';
 class Home extends Component {
     render() {
         return (
-            <div>Home page content</div>
+            <PageHeader title="Home"/>
           );
     }
 }

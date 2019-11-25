@@ -3,7 +3,7 @@ import { PageHeader } from 'antd';
 
 function CreateOrder() {
   return (
-    <div>Create order content</div>
+    <PageHeader title="Сreate order" subTitle="Here you can create the new order"/>
   );
 }
 
