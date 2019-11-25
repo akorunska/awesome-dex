@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Typography, Menu } from "antd";
+import { Layout, Typography, /* Menu */ } from "antd";
 import Sidebar from "./sidebar";
 import styled, { css } from "styled-components";
 
@@ -12,8 +12,8 @@ const MainContent = styled.main`
 	position: relative;
 
 	${p =>
-		!p.noPadding &&
-		css`
+        !p.noPadding &&
+        css`
 			position: static;
 			padding: 30px;
 			@media (max-width: 575px) {
@@ -34,24 +34,23 @@ const Logo = styled.div`
 class AppLayout extends Component {
 
     render() {
-        const { location, children } = this.props;
+        const { children } = this.props;
         return (
-        <>
-            <Layout className="main-layout">
-                <Header className="header">
-                    <Logo>
-                        <Title level={4}>Awesome DEX</Title>
-                    </Logo>
-                </Header>
-                <Layout style={{height:"100vh"}}>
-                    <Sidebar
-                        // location={location}
-                    />
+            <>
+                <Layout className="main-layout">
+                    <Header className="header">
+                        <Logo>
+                            <Title level={4}>Awesome DEX</Title>
+                        </Logo>
+                    </Header>
+                    <Layout style={{ height: "100vh" }}>
+                        <Sidebar
+                        />
                         <MainContent>{children}</MainContent>
+                    </Layout>
+                    {/* <Footer style={{backgroundColor: 'red'}}>i'm here</Footer> */}
                 </Layout>
-                <Footer style={{backgroundColor: 'red'}}>i'm here</Footer>
-            </Layout>
-        </>);
+            </>);
     }
 }
 
