@@ -1,28 +1,62 @@
 import React, { Component } from 'react';
 import { PageHeader, Button } from 'antd';
 import { Formik } from 'formik'
+import { getOntologyAccount } from '../api/constants'
+import { createOrderSellOnt, get_initiator } from '../api/createOrder'
 import { Row, Col, Form, Select, Input, Card } from "antd";
 
-const Option = { Select };
+const { Option } = Select;
 
 class CreateOrder extends Component {
+  handleFormSubmit = async (values, formActions) => {
+    const account = await getOntologyAccount();
+    try {
+      const secret = 'secret';
+      createOrderSellOnt(values.ontAmount, values.ethAmount, secret, account);
+      // get_initiator(secret);
+    } catch (e) {
+      console.log(e);
+    }
+    formActions.setSubmitting(false);
+  }
+
+  getInitiator = async () => {
+    try {
+      const secret = 'secret22';
+      get_initiator(secret);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+
+
   handleAssetToSellChange = setFieldValue => value => {
     setFieldValue("assetToSell", value);
   };
 
   render() {
-    const assetsToSell = ['ont', 'eth'];
+    const assetsToSell = ['ont', /* 'eth' */];
     return (
       <>
         <PageHeader title="Сreate order" subTitle="Here you can create the new order to exchange ONT to ETH and vice versa" />
-        {/* data for new order creation: amount of ont to sell, amount of eth to buy */}
         <Card style={{ marginTop: 20 }}>
           <Formik
+            onSubmit={this.handleFormSubmit}
             initialValues={{
               assetToSell: assetsToSell[0],
-              ontAmount: 0,
-              ethAmount: 0,
-            }}>
+              ontAmount: 120,
+              ethAmount: 0.5,
+            }}
+            validate={values => {
+              let errors = {};
+
+              if (!values.assetToSell) {
+                errors.assetToSell = "Required field";
+              }
+              return errors;
+            }}
+          >
             {({
               values,
               errors,
@@ -51,13 +85,15 @@ class CreateOrder extends Component {
                           onBlur={handleBlur}
                           disabled={isSubmitting}
                         >
-                          {assetsToSell.map((asset, index) => {
-                            return (
-                              <Option key={index} value={asset}>
-                                {asset}
-                              </Option>
-                            );
-                          })}
+                          {
+                            assetsToSell.map((asset, index) => {
+                              return (
+                                <Option key={index} value={asset}>
+                                  {asset}
+                                </Option>
+                              );
+                            })
+                          }
                         </Select>
                       </Form.Item>
                     </Col>
@@ -71,7 +107,8 @@ class CreateOrder extends Component {
                       >
                         <Input
                           type="number"
-                          step={100}
+                          step={0.00000001}
+                          min={0.00000001}
                           name="ontAmount"
                           value={values.ontAmount ? values.ontAmount : 0}
                           onChange={handleChange}
@@ -90,7 +127,8 @@ class CreateOrder extends Component {
                       >
                         <Input
                           type="number"
-                          step={100}
+                          step={0.00000001}
+                          min={0.00000001}
                           name="ethAmount"
                           value={values.ethAmount ? values.ethAmount : 0}
                           onChange={handleChange}
@@ -108,8 +146,16 @@ class CreateOrder extends Component {
                         disabled={!allowToSubmitForm || isSubmitting}
                         loading={isSubmitting}
                       >
-                        Upgrade
-                  </Button>
+                        Create order
+                      </Button>
+
+                      <Button
+                        disabled={!allowToSubmitForm || isSubmitting}
+                        loading={isSubmitting}
+                        onClick={this.getInitiator}
+                      >
+                        Get initiator
+                      </Button>
                     </Col>
                   </Row>
                 </form>
