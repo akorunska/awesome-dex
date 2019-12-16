@@ -11,7 +11,7 @@ contract Exchange {
     struct respondedOrder {
         address initiatorAddress;
         address buyerAddress;
-        string hashlock; // maybe not string
+        bytes32 hashlock; // maybe not string
         uint amountEthLocked;
         uint refundTimelock;
         uint claimTimelock;
@@ -19,15 +19,15 @@ contract Exchange {
         Status status;
     }
 
-    mapping (string => respondedOrder) orderList; // hashlock => order data, one record for every response
-    // string[] orderIdList;
+    mapping (bytes32 => respondedOrder) public orderList; // hashlock => order data
+    uint timelockDuration = 1 * 60; // set to 1 minute for testing purposes, should be 60*60*24;
 
-    function respondToOrder (string memory hashlock, uint amountEthToLock) public payable {
-        require(msg.value == amountEthToLock);
-        
+    function respondToOrder (bytes32 hashlock, uint amountEthToLock) public payable {
+        require(msg.value == amountEthToLock, "Insufficient amount of ETH provided");
+
         orderList[hashlock] = respondedOrder({
-            buyerAddress: address(0),
-            initiatorAddress: msg.sender,
+            buyerAddress: address(msg.sender),
+            initiatorAddress: address(0),
             hashlock: hashlock,
             amountEthLocked: amountEthToLock,
             refundTimelock: 0,
@@ -37,46 +37,37 @@ contract Exchange {
         });
     }
 
-    function lockIntiatorAddress (string memory hashlock, address initiatorAddress) public {
-        // todo require that such hashlock is registered
+    function lockIntiatorAddress (bytes32 hashlock, address initiatorAddress) public {
+        require(orderList[hashlock].buyerAddress == msg.sender, "Can only be perfomed by order buyer");
+        require(orderList[hashlock].status == Status.Responded, "Order status should be Responded");
+
         orderList[hashlock].initiatorAddress = initiatorAddress;
-        orderList[hashlock].refundTimelock = now + 60*60*24;
-        orderList[hashlock].claimTimelock = now + 60*60*24;
+        orderList[hashlock].refundTimelock = now + timelockDuration;
+        orderList[hashlock].claimTimelock = now + timelockDuration;
         orderList[hashlock].status = Status.Locked;
     }
 
-    function claimEth (string memory hashlock, address buyerAddress) public {
-        // todo require that such hashlock is registered
-        require(orderList[hashlock].status == Status.Locked);
-        require(orderList[hashlock].initiatorAddress == msg.sender);
-        require(now >= orderList[hashlock].claimTimelock);
-
-        // todo check hash(secret) equals hashlock
-
+    function claimEth (bytes32 hashlock, string memory secret) public {
+        require(orderList[hashlock].initiatorAddress == msg.sender, "Can only be perfomed by order initiator");
+        require(orderList[hashlock].status == Status.Locked, "Order status should be Locked");
+        require(sha256(abi.encodePacked(secret)) == hashlock, "Secret does not match the hashlock");
+        
         orderList[hashlock].status = Status.Performed;
         msg.sender.transfer(orderList[hashlock].amountEthLocked);
     }
 
-    function refundEth (string memory hashlock) public {
-        // todo require that such hashlock is registered
-        require(orderList[hashlock].buyerAddress == msg.sender);
-        require(orderList[hashlock].status != Status.Refunded && orderList[hashlock][uint(orderIndex)].status != Status.Performed);
+    function refundEth (bytes32 hashlock) public payable {
+        require(orderList[hashlock].buyerAddress == msg.sender, "Can only be perfomed by order buyer");
+        require(orderList[hashlock].status != Status.Refunded && orderList[hashlock].status != Status.Performed,
+        "Order was already Performed or Refunded");
         if (orderList[hashlock].status == Status.Locked) {
-            require(now >= orderList[hashlock].refundTimelock);
+            require(now >= orderList[hashlock].refundTimelock, "Timelock is not over");
         }
-        // initiate refunding
-        // when user refunds eth and the deal was not locked, we delete his / her tx data to free some space in storage
-        // solidity arrays do not provide pop(), so we swap current element with last one and then delete the last one
-        orderList[hashlock].status = Status.Refunded;
-    }
 
-    function stringToBytes32(string memory source) private pure returns (bytes32 result) {
-        bytes memory temp = bytes(source);
-        if (temp.length == 0) {
-            return 0x0;
-        }
-        assembly {
-            result := mload(add(source, 32))
-        }
+        orderList[hashlock].status = Status.Refunded;
+        msg.sender.transfer(orderList[hashlock].amountEthLocked);
     }
 }
+
+// https://emn178.github.io/online-tools/sha256.html
+// use 0x + the actual sha when passing parameters
