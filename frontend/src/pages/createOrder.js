@@ -1,52 +1,54 @@
-import React, { Component } from 'react';
-import { PageHeader, Button } from 'antd';
-import { Formik } from 'formik'
-import { getOntologyAccount } from '../api/constants'
-import { createOrderSellOnt, get_initiator } from '../api/createOrder'
+import React, { Component } from "react";
+import { PageHeader, Button } from "antd";
+import { Formik } from "formik";
+// import { getOntologyAccount } from "../api/constants";
+import { createOrderSellOnt, get_initiator } from "../api/createOrder";
 import { Row, Col, Form, Select, Input, Card } from "antd";
 
 const { Option } = Select;
 
 class CreateOrder extends Component {
   handleFormSubmit = async (values, formActions) => {
-    const account = await getOntologyAccount();
+    // const account = await getOntologyAccount();
+    const account = "";
     try {
-      const secret = 'secret';
+      const secret = "secret";
       createOrderSellOnt(values.ontAmount, values.ethAmount, secret, account);
       // get_initiator(secret);
     } catch (e) {
       console.log(e);
     }
     formActions.setSubmitting(false);
-  }
+  };
 
   getInitiator = async () => {
     try {
-      const secret = 'secret22';
+      const secret = "secret22";
       get_initiator(secret);
     } catch (e) {
       console.log(e);
     }
-  }
-
-
+  };
 
   handleAssetToSellChange = setFieldValue => value => {
     setFieldValue("assetToSell", value);
   };
 
   render() {
-    const assetsToSell = ['ont', /* 'eth' */];
+    const assetsToSell = ["ont" /* 'eth' */];
     return (
       <>
-        <PageHeader title="Сreate order" subTitle="Here you can create the new order to exchange ONT to ETH and vice versa" />
+        <PageHeader
+          title="Сreate order"
+          subTitle="Here you can create the new order to exchange ONT to ETH and vice versa"
+        />
         <Card style={{ marginTop: 20 }}>
           <Formik
             onSubmit={this.handleFormSubmit}
             initialValues={{
               assetToSell: assetsToSell[0],
               ontAmount: 120,
-              ethAmount: 0.5,
+              ethAmount: 0.5
             }}
             validate={values => {
               let errors = {};
@@ -64,7 +66,7 @@ class CreateOrder extends Component {
               handleBlur,
               handleSubmit,
               handleChange,
-              setFieldValue,
+              setFieldValue
               // touched,
             }) => {
               const allowToSubmitForm = true;
@@ -85,15 +87,13 @@ class CreateOrder extends Component {
                           onBlur={handleBlur}
                           disabled={isSubmitting}
                         >
-                          {
-                            assetsToSell.map((asset, index) => {
-                              return (
-                                <Option key={index} value={asset}>
-                                  {asset}
-                                </Option>
-                              );
-                            })
-                          }
+                          {assetsToSell.map((asset, index) => {
+                            return (
+                              <Option key={index} value={asset}>
+                                {asset}
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>

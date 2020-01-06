@@ -1,57 +1,44 @@
 import React, { Component } from "react";
-import { Layout, Typography, /* Menu */ } from "antd";
-import Sidebar from "./sidebar";
+import { Layout /* Menu */ } from "antd";
 import styled, { css } from "styled-components";
-
-const { Header, Footer } = Layout;
-const { Title } = Typography;
+import Sidebar from "./sidebar";
+import AppHeader from "./header";
 
 const MainContent = styled.main`
-	flex: auto;
-	min-height: 360px;
-	position: relative;
+  flex: auto;
+  min-height: 360px;
+  position: relative;
 
-	${p =>
-        !p.noPadding &&
-        css`
-			position: static;
-			padding: 30px;
-			@media (max-width: 575px) {
-				padding: 15px;
-			}
-		`}
+  ${p =>
+    !p.noPadding &&
+    css`
+      position: static;
+      padding: 30px;
+      @media (max-width: 575px) {
+        padding: 15px;
+      }
+    `}
 `;
 
-const Logo = styled.div`
-    padding-top: 1.5em;
-	height: 2.5rem;
-    line-height: 2rem;
-    h4 {
-        color: white;
-    }
-`;
+export const MyContext = React.createContext(null);
 
 class AppLayout extends Component {
+  render() {
+    console.log(this.props);
+    const { children, user } = this.props;
 
-    render() {
-        const { children } = this.props;
-        return (
-            <>
-                <Layout className="main-layout">
-                    <Header className="header">
-                        <Logo>
-                            <Title level={4}>Awesome DEX</Title>
-                        </Logo>
-                    </Header>
-                    <Layout style={{ height: "100vh" }}>
-                        <Sidebar
-                        />
-                        <MainContent>{children}</MainContent>
-                    </Layout>
-                    {/* <Footer style={{backgroundColor: 'red'}}>i'm here</Footer> */}
-                </Layout>
-            </>);
-    }
+    return (
+      <>
+        <Layout className="main-layout">
+          <AppHeader />
+          <Layout style={{ height: "100vh" }}>
+            <Sidebar />
+            <MainContent>{children}</MainContent>
+          </Layout>
+        </Layout>
+      </>
+    );
+  }
 }
 
 export default AppLayout;
