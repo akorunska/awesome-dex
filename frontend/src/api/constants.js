@@ -23,5 +23,36 @@ export const users = {
   }
 };
 
+export const layoutPermissionsByUser = {
+  alice: [
+    {
+      displayName: "Home",
+      route: "/"
+    },
+    {
+      displayName: "Create Order",
+      route: "/create-order"
+    },
+    {
+      displayName: "Cancel and refund",
+      route: "#"
+    }
+  ],
+  bob: [
+    {
+      displayName: "Home",
+      route: "/"
+    },
+    {
+      displayName: "Respond to order",
+      route: "/respond-to-order"
+    },
+    {
+      displayName: "Cancel and refund",
+      route: "#"
+    }
+  ]
+};
+
 // export const ontologyExchangeContractSellEth = "";
 // export const ethereumExchangeContractSellEth = "";
