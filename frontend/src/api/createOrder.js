@@ -1,6 +1,7 @@
 import { client } from "ontology-dapi";
 import sha256 from "js-sha256";
 import { ontologyExchangeContractSellOnt } from "./constants";
+import { addSignAndSendTrx, createTrx } from "./bc";
 
 client.registerClient({});
 
@@ -17,31 +18,29 @@ export async function createOrderSellOnt(
   amountOfOntToSell,
   amountOfEthToBuy,
   secret,
-  initiatorAddress
+  sender
 ) {
   try {
     const scriptHash = ontologyExchangeContractSellOnt;
     const operation = "intiate_order";
     const hashlock = getHashlock(secret);
-
-    initiatorAddress = "8f651d459b4f146380dab28e7cfb9d4bb9c3fcd1";
+    const { ontAddress, ontAddressByteArray, ontPrivKey } = sender;
 
     const args = [
       { type: "Integer", value: amountOfOntToSell },
       { type: "Integer", value: amountOfEthToBuy * decimals },
       { type: "Hex", value: hashlock },
-      { type: "ByteArray", value: initiatorAddress }
+      { type: "ByteArray", value: ontAddressByteArray }
     ];
-    let gasPrice = 0;
-    let gasLimit = 300000;
-    let result = await client.api.smartContract.invoke({
-      scriptHash,
+
+    const serializedTrx = await createTrx(
       operation,
       args,
-      gasPrice,
-      gasLimit
-    });
-    console.log(result);
+      scriptHash,
+      ontAddress
+    );
+
+    return await addSignAndSendTrx(serializedTrx, ontPrivKey);
   } catch (e) {
     console.log(e);
   }

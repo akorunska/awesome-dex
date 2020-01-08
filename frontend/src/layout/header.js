@@ -28,6 +28,7 @@ class AppHeader extends Component {
     const { setUser } = this.props;
 
     setUser(users[e.target.value]);
+    // todo: redirect to home when switching users?
   };
 
   render() {

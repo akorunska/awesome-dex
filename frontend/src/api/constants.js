@@ -11,6 +11,7 @@ export const users = {
     ethAddress: "",
     ethPrivKey: "",
     ontAddress: "",
+    ontAddressByteArray: "8f651d459b4f146380dab28e7cfb9d4bb9c3fcd1",
     ontPrivKey: ""
   },
   bob: {
@@ -53,6 +54,10 @@ export const layoutPermissionsByUser = {
     }
   ]
 };
+
+export const ontNodeEndpoint = "https://" + "127.0.0.1" + ":20334";
+
+export const notifyTimeout = 30000;
 
 // export const ontologyExchangeContractSellEth = "";
 // export const ethereumExchangeContractSellEth = "";

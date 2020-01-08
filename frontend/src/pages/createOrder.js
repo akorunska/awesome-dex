@@ -1,20 +1,19 @@
 import React, { Component } from "react";
 import { PageHeader, Button } from "antd";
+import { connect } from "react-redux";
 import { Formik } from "formik";
-// import { getOntologyAccount } from "../api/constants";
 import { createOrderSellOnt, get_initiator } from "../api/createOrder";
 import { Row, Col, Form, Select, Input, Card } from "antd";
 
 const { Option } = Select;
 
+const secret = "secret";
+
 class CreateOrder extends Component {
   handleFormSubmit = async (values, formActions) => {
-    // const account = await getOntologyAccount();
-    const account = "";
+    const { user } = this.props;
     try {
-      const secret = "secret";
-      createOrderSellOnt(values.ontAmount, values.ethAmount, secret, account);
-      // get_initiator(secret);
+      createOrderSellOnt(values.ontAmount, values.ethAmount, secret, user);
     } catch (e) {
       console.log(e);
     }
@@ -23,7 +22,6 @@ class CreateOrder extends Component {
 
   getInitiator = async () => {
     try {
-      const secret = "secret22";
       get_initiator(secret);
     } catch (e) {
       console.log(e);
@@ -168,4 +166,8 @@ class CreateOrder extends Component {
   }
 }
 
-export default CreateOrder;
+export default connect(state => {
+  return {
+    user: state.user
+  };
+})(CreateOrder);
