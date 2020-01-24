@@ -1,6 +1,6 @@
 import { Crypto, utils } from "ontology-ts-sdk";
 
-export const gasPrice = 500;
+export const gasPrice = 0;
 export const gasLimit = 90000;
 
 export function reverseAddressHex(str) {

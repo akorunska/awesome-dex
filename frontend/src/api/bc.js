@@ -1,16 +1,53 @@
-import { TransactionBuilder, Parameter, Transaction } from "ontology-ts-sdk";
+import {
+  TransactionBuilder,
+  Parameter,
+  Transaction,
+  Crypto
+} from "ontology-ts-sdk";
+import { Reader } from "ontology-ts-crypto";
 import { getBcClient } from "./network";
 import { gasPrice, gasLimit, cryptoAddress } from "../utils/blockchain";
 import { timeout } from "promise-timeout";
 import { notifyTimeout } from "./constants";
 
-export function createTrx({
+const PrivateKey = Crypto.PrivateKey;
+const KeyParameters = Crypto.KeyParameters;
+const KeyType = Crypto.KeyType;
+const CurveLabel = Crypto.CurveLabel;
+
+export function deserializePrivateKey(str) {
+  const b = new Buffer(str, "hex");
+  const r = new Reader(b);
+
+  if (b.length === 32) {
+    // ECDSA
+    const algorithm = KeyType.ECDSA;
+    const curve = CurveLabel.SECP256R1;
+    const sk = r.readBytes(32);
+    return new PrivateKey(
+      sk.toString("hex"),
+      algorithm,
+      new KeyParameters(curve)
+    );
+  } else {
+    const algorithmHex = r.readByte();
+    const curveHex = r.readByte();
+    const sk = r.readBytes(32);
+
+    return new PrivateKey(
+      sk.toString("hex"),
+      KeyType.fromHex(algorithmHex),
+      new KeyParameters(CurveLabel.fromHex(curveHex))
+    );
+  }
+}
+
+export async function createTrx(
   funcName,
   params,
   contractAddress,
   accountAddress
-}) {
-  console.log("create trx", params);
+) {
   const paramsTyped = params.map((param, index) => {
     return new Parameter(param.label, param.type, param.value);
   });

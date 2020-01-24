@@ -24,8 +24,7 @@ export const MyContext = React.createContext(null);
 
 class AppLayout extends Component {
   render() {
-    console.log(this.props);
-    const { children, user } = this.props;
+    const { children } = this.props;
 
     return (
       <>

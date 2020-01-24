@@ -7,13 +7,19 @@ import { Row, Col, Form, Select, Input, Card } from "antd";
 
 const { Option } = Select;
 
-const secret = "secret";
+const secret = "secretss";
 
 class CreateOrder extends Component {
   handleFormSubmit = async (values, formActions) => {
     const { user } = this.props;
     try {
-      createOrderSellOnt(values.ontAmount, values.ethAmount, secret, user);
+      const result = await createOrderSellOnt(
+        values.ontAmount,
+        values.ethAmount,
+        secret,
+        user
+      );
+      console.log(result);
     } catch (e) {
       console.log(e);
     }
@@ -21,8 +27,10 @@ class CreateOrder extends Component {
   };
 
   getInitiator = async () => {
+    const { user } = this.props;
+
     try {
-      get_initiator(secret);
+      console.log(await get_initiator(secret, user));
     } catch (e) {
       console.log(e);
     }
@@ -38,7 +46,7 @@ class CreateOrder extends Component {
       <>
         <PageHeader
           title="Сreate order"
-          subTitle="Here you can create the new order to exchange ONT to ETH and vice versa"
+          subTitle="Here you can create the new order to exchange ONT to ETH"
         />
         <Card style={{ marginTop: 20 }}>
           <Formik
