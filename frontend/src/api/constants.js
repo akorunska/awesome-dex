@@ -8,8 +8,9 @@ export const users = {
   alice: {
     name: "alice",
     displayName: "Alice",
-    ethAddress: "",
-    ethPrivKey: "",
+    ethAddress: "0x174315c0039f0160E12FB3AC96A7D18D61B1A714",
+    ethPrivKey:
+      "c5b7343bec74fdfb7ef17b7b380f3a5967f60231731563c42520ab80797b179a",
     ontAddress: "AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ",
     ontAddressByteArray: "8f651d459b4f146380dab28e7cfb9d4bb9c3fcd1",
     ontPrivKey:
@@ -18,9 +19,11 @@ export const users = {
   bob: {
     name: "bob",
     displayName: "Bob",
-    ethAddress: "",
-    ethPrivKey: "",
+    ethAddress: "0x95026e6E2A93283f54774d81B0b5d9892B3Ca3f2",
+    ethPrivKey:
+      "5e073f33d224bb76ecc158f07e41e05681ef3e3b16b26fe917955942c5fdf23b",
     ontAddress: "",
+    ontAddressByteArray: "",
     ontPrivKey: ""
   }
 };
