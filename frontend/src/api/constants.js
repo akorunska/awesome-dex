@@ -36,6 +36,10 @@ export const layoutPermissionsByUser = {
       route: "/create-order"
     },
     {
+      displayName: "Check Order Data",
+      route: "/order-data"
+    },
+    {
       displayName: "Cancel and refund",
       route: "#"
     }
@@ -50,6 +54,10 @@ export const layoutPermissionsByUser = {
       route: "/respond-to-order"
     },
     {
+      displayName: "Check Order Data",
+      route: "/order-data"
+    },
+    {
       displayName: "Cancel and refund",
       route: "#"
     }
@@ -59,6 +67,8 @@ export const layoutPermissionsByUser = {
 export const ontNodeEndpoint = "http://" + "127.0.0.1" + ":20334";
 
 export const notifyTimeout = 30000;
+
+export const ethDecimals = 10 ** 8;
 
 // export const ontologyExchangeContractSellEth = "";
 // export const ethereumExchangeContractSellEth = "";

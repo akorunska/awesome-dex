@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import styled, { css } from "styled-components";
+import { Redirect } from "react-router-dom";
+import styled from "styled-components";
 import { Layout, Typography, Radio } from "antd";
+import ToggleUser from "./toggleUser";
 import { users } from "../api/constants";
 import Actions from "../redux/actions";
 
@@ -24,44 +26,21 @@ const HeaderLayout = styled.header`
 `;
 
 class AppHeader extends Component {
-  handleUserChange = e => {
-    const { setUser } = this.props;
-
-    setUser(users[e.target.value]);
-    // todo: redirect to home when switching users?
+  state = {
+    redirect: false
   };
-
   render() {
-    const { user } = this.props;
-    const { alice, bob } = users;
-
     return (
       <Header className="header">
         <HeaderLayout>
           <Logo>
             <Title level={4}>Awesome DEX</Title>
           </Logo>
-          <Radio.Group
-            onChange={this.handleUserChange}
-            defaultValue={user.name}
-          >
-            {}
-            <Radio.Button value={alice.name}>{alice.displayName}</Radio.Button>
-            <Radio.Button value={bob.name}>{bob.displayName}</Radio.Button>
-          </Radio.Group>
+          <ToggleUser />
         </HeaderLayout>
       </Header>
     );
   }
 }
 
-export default connect(
-  state => {
-    return {
-      user: state.user
-    };
-  },
-  {
-    setUser: Actions.user.setUser
-  }
-)(AppHeader);
+export default AppHeader;

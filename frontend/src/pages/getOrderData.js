@@ -1,23 +1,53 @@
 import React, { Component } from "react";
-import { PageHeader, Button, Row, Col, Form, Input, Card } from "antd";
+import { connect } from "react-redux";
+import {
+  PageHeader,
+  Button,
+  Row,
+  Col,
+  Form,
+  Input,
+  Card,
+  Descriptions
+} from "antd";
 import { Formik } from "formik";
+import { getOrderData } from "../api/getOrderData";
 
-class RespondToOrder extends Component {
+// f621b7540089c6194b370608dc3116a1c555a64c98801e2cdfc1a900adc15ca2
+class GetOrderData extends Component {
+  state = {
+    ontologyContractOrderData: {},
+    ethereumContractOrderData: {}
+  };
+
   handleFormSubmit = async (values, formActions) => {
     try {
-      console.log(values.hashlock);
+      const result = await getOrderData(values.hashlock);
+      console.log("received result: ", result);
+      this.setState({ ontologyContractOrderData: result });
     } catch (e) {
       console.log(e);
     }
     formActions.setSubmitting(false);
   };
 
+  getInitiator = async () => {
+    // const { user } = this.props;
+
+    try {
+      // console.log(await get_initiator(secret, user));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   render() {
+    const { ontologyContractOrderData } = this.state;
     return (
       <>
         <PageHeader
-          title="Respond to order"
-          subTitle="Here you can respond to order by entering its hashlock"
+          title="Check order data"
+          subTitle="Here you get order data by it's hashlock"
         />
         <Card style={{ marginTop: 20 }}>
           <Formik
@@ -71,7 +101,7 @@ class RespondToOrder extends Component {
                           disabled={!allowToSubmitForm || isSubmitting}
                           loading={isSubmitting}
                         >
-                          Respond to order
+                          Check order data
                         </Button>
                       </Form.Item>
                     </Col>
@@ -81,9 +111,29 @@ class RespondToOrder extends Component {
             }}
           </Formik>
         </Card>
+
+        {Object.entries(ontologyContractOrderData).length !== 0 ? (
+          <Card>
+            <Descriptions title="Ontology contract info">
+              <Descriptions.Item label="Intiator">
+                {ontologyContractOrderData.initiator}
+              </Descriptions.Item>
+              <Descriptions.Item label="Amount of ont to sell">
+                {ontologyContractOrderData.amountOfOntToSell}
+              </Descriptions.Item>
+              <Descriptions.Item label="Amount of eth to buy">
+                {ontologyContractOrderData.amountOfEthToBuy}
+              </Descriptions.Item>
+            </Descriptions>
+          </Card>
+        ) : null}
       </>
     );
   }
 }
 
-export default RespondToOrder;
+export default connect(state => {
+  return {
+    user: state.user
+  };
+})(GetOrderData);

@@ -1,7 +1,15 @@
+import sha256 from "js-sha256";
 import { Crypto, utils } from "ontology-ts-sdk";
 
 export const gasPrice = 0;
 export const gasLimit = 90000;
+
+export const getHashlock = secret => {
+  let hash = sha256.create();
+  hash.update(secret);
+  const hashHex = hash.hex();
+  return hashHex;
+};
 
 export function reverseAddressHex(str) {
   return new Crypto.Address(utils.reverseHex(str));

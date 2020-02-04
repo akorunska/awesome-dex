@@ -5,7 +5,7 @@ import { Layout } from "antd";
 import { Menu } from "antd";
 import { layoutPermissionsByUser } from "../api/constants";
 
-const SubMenu = Menu.SubMenu;
+// const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 
 class Sidebar extends Component {

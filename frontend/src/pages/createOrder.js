@@ -4,19 +4,28 @@ import { connect } from "react-redux";
 import { Formik } from "formik";
 import { createOrderSellOnt, get_initiator } from "../api/createOrder";
 import { Row, Col, Form, Select, Input, Card } from "antd";
+import { getHashlock } from "../utils/blockchain";
+import { randomBytes } from "crypto";
 
 const { Option } = Select;
 
-const secret = "secretss";
-
 class CreateOrder extends Component {
+  generateSecret = () => {
+    return randomBytes(48).toString("hex");
+  };
+
   handleFormSubmit = async (values, formActions) => {
     const { user } = this.props;
+    const secret = this.generateSecret();
+    const hashlock = getHashlock(secret);
+    console.log(secret, hashlock);
+    // 74a9691e2fc6b35bfd2a239808bc44e58c3bd7e5b06f37708ce65fc5c40fc7d47ad2ce29c92192a3fa92b5f73ab9e4aa
+    // f621b7540089c6194b370608dc3116a1c555a64c98801e2cdfc1a900adc15ca2
     try {
       const result = await createOrderSellOnt(
         values.ontAmount,
         values.ethAmount,
-        secret,
+        hashlock,
         user
       );
       console.log(result);
@@ -24,16 +33,6 @@ class CreateOrder extends Component {
       console.log(e);
     }
     formActions.setSubmitting(false);
-  };
-
-  getInitiator = async () => {
-    const { user } = this.props;
-
-    try {
-      console.log(await get_initiator(secret, user));
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   handleAssetToSellChange = setFieldValue => value => {
@@ -153,14 +152,6 @@ class CreateOrder extends Component {
                         loading={isSubmitting}
                       >
                         Create order
-                      </Button>
-
-                      <Button
-                        disabled={!allowToSubmitForm || isSubmitting}
-                        loading={isSubmitting}
-                        onClick={this.getInitiator}
-                      >
-                        Get initiator
                       </Button>
                     </Col>
                   </Row>
