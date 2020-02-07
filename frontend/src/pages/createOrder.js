@@ -19,8 +19,8 @@ class CreateOrder extends Component {
     const secret = this.generateSecret();
     const hashlock = getHashlock(secret);
     console.log(secret, hashlock);
-    // 74a9691e2fc6b35bfd2a239808bc44e58c3bd7e5b06f37708ce65fc5c40fc7d47ad2ce29c92192a3fa92b5f73ab9e4aa
-    // f621b7540089c6194b370608dc3116a1c555a64c98801e2cdfc1a900adc15ca2
+    // 086e143d4dc3ddca6dfd8075163d6e06be4580407471b75025867be9ba358d064d5ad73c43f8f4df8ab03de362c9914d
+    // a0f9924f473606a6445fbc2507d265eb360fed5abdeb3cfc5a1a43ad1e831d36
     try {
       const result = await createOrderSellOnt(
         values.ontAmount,
@@ -52,8 +52,8 @@ class CreateOrder extends Component {
             onSubmit={this.handleFormSubmit}
             initialValues={{
               assetToSell: assetsToSell[0],
-              ontAmount: 120,
-              ethAmount: 0.5
+              ontAmount: 1,
+              ethAmount: 0.005
             }}
             validate={values => {
               let errors = {};

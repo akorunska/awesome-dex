@@ -11,10 +11,10 @@ export const users = {
     ethAddress: "0x174315c0039f0160E12FB3AC96A7D18D61B1A714",
     ethPrivKey:
       "c5b7343bec74fdfb7ef17b7b380f3a5967f60231731563c42520ab80797b179a",
-    ontAddress: "AUr5QUfeBADq6BMY6Tp5yuMsUNGpsD7nLZ",
-    ontAddressByteArray: "8f651d459b4f146380dab28e7cfb9d4bb9c3fcd1",
+    ontAddress: "AecaeSEBkt5GcBCxwz1F41TvdjX3dnKBkJ",
+    ontAddressByteArray: "fa88f5244be19659bbd24477caeeacac7cbf781b",
     ontPrivKey:
-      "274b0b664d9c1e993c1d62a42f78ba84c379e332aa1d050ce9c1840820acee8b"
+      "0067ae8a3731709d8c820c03b200b9552ec61e6634cbcaf8a6a1f9d8f9f0f608"
   },
   bob: {
     name: "bob",
@@ -22,9 +22,11 @@ export const users = {
     ethAddress: "0x95026e6E2A93283f54774d81B0b5d9892B3Ca3f2",
     ethPrivKey:
       "5e073f33d224bb76ecc158f07e41e05681ef3e3b16b26fe917955942c5fdf23b",
-    ontAddress: "",
-    ontAddressByteArray: "",
-    ontPrivKey: ""
+    // junior fringe moment drum aware cup pepper insane month subway gloom burger candy winter uncle climb online photo normal circle crop senior move speak
+    ontAddress: "AGE6S1NRNPJaemynBnWYTXTS9vxSPFZ6VA",
+    ontAddressByteArray: "04f57cb174af1feb5d7a34197ea72621778c8988",
+    ontPrivKey:
+      "e0342966b157c1a114b93a61ba6389b6a55c8dd354e6f7bccd04b55aac0f9684"
   }
 };
 
@@ -67,7 +69,8 @@ export const layoutPermissionsByUser = {
   ]
 };
 
-export const ontNodeEndpoint = "http://" + "127.0.0.1" + ":20334";
+// export const ontNodeEndpoint = "http://" + "127.0.0.1" + ":20334";
+export const ontNodeEndpoint = "http://" + "polaris1.ont.io" + ":20334";
 
 export const notifyTimeout = 30000;
 
