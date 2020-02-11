@@ -1,19 +1,81 @@
-import { client } from 'ontology-dapi';
+import PrivateKey from "ontology-ts-sdk";
 
+export const ontologyExchangeContractSellOnt =
+  "14972f644a4c43a9e097ee55968f877ce799754d";
+export const ethereumExchangeContractSellOnt =
+  "0x5d5c45b2a0d5d3c61b3faa0dfaa6228a28cc1ee5";
 
-client.registerClient({});
-export const getOntologyAccount = async () => {
-  try {
-    await client.api.provider.getProvider();
-    return await client.api.asset.getAccount();
-  } catch (e) {
-    console.log(e)
-    return ""
+export const users = {
+  alice: {
+    name: "alice",
+    displayName: "Alice",
+    ethAddress: "0x174315c0039f0160E12FB3AC96A7D18D61B1A714",
+    ethPrivKey:
+      "c5b7343bec74fdfb7ef17b7b380f3a5967f60231731563c42520ab80797b179a",
+    ontAddress: "AecaeSEBkt5GcBCxwz1F41TvdjX3dnKBkJ",
+    ontAddressByteArray: "fa88f5244be19659bbd24477caeeacac7cbf781b",
+    ontPrivKey:
+      "0067ae8a3731709d8c820c03b200b9552ec61e6634cbcaf8a6a1f9d8f9f0f608"
+  },
+  bob: {
+    name: "bob",
+    displayName: "Bob",
+    ethAddress: "0x95026e6E2A93283f54774d81B0b5d9892B3Ca3f2",
+    ethPrivKey:
+      "5e073f33d224bb76ecc158f07e41e05681ef3e3b16b26fe917955942c5fdf23b",
+    // junior fringe moment drum aware cup pepper insane month subway gloom burger candy winter uncle climb online photo normal circle crop senior move speak
+    ontAddress: "AGE6S1NRNPJaemynBnWYTXTS9vxSPFZ6VA",
+    ontAddressByteArray: "04f57cb174af1feb5d7a34197ea72621778c8988",
+    ontPrivKey:
+      "e0342966b157c1a114b93a61ba6389b6a55c8dd354e6f7bccd04b55aac0f9684"
   }
-}
+};
 
-export const ontologyExchangeContractSellOnt = "4d7599e77c878f9655ee97e0a9434c4a642f9714";
-export const ethereumExchangeContractSellOnt = "";
+export const layoutPermissionsByUser = {
+  alice: [
+    {
+      displayName: "Home",
+      route: "/"
+    },
+    {
+      displayName: "Create Order",
+      route: "/create-order"
+    },
+    {
+      displayName: "Check Order Data",
+      route: "/order-data"
+    },
+    {
+      displayName: "Cancel and refund",
+      route: "#"
+    }
+  ],
+  bob: [
+    {
+      displayName: "Home",
+      route: "/"
+    },
+    {
+      displayName: "Respond to order",
+      route: "/respond-to-order"
+    },
+    {
+      displayName: "Check Order Data",
+      route: "/order-data"
+    },
+    {
+      displayName: "Cancel and refund",
+      route: "#"
+    }
+  ]
+};
+
+// export const ontNodeEndpoint = "http://" + "127.0.0.1" + ":20334";
+export const ontNodeEndpoint = "http://" + "polaris1.ont.io" + ":20334";
+
+export const notifyTimeout = 30000;
+
+export const ethDecimals = 10 ** 8;
 
 // export const ontologyExchangeContractSellEth = "";
 // export const ethereumExchangeContractSellEth = "";

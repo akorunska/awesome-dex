@@ -1,52 +1,73 @@
-import React, { Component } from 'react';
-import { PageHeader, Button } from 'antd';
-import { Formik } from 'formik'
-import { getOntologyAccount } from '../api/constants'
-import { createOrderSellOnt, get_initiator } from '../api/createOrder'
-import { Row, Col, Form, Select, Input, Card } from "antd";
+import React, { Component } from "react";
+import { PageHeader, Button } from "antd";
+import { connect } from "react-redux";
+import { Formik } from "formik";
+import { createOrderSellOnt } from "../api/createOrder";
+import { Row, Col, Form, Select, Input, Card, Descriptions } from "antd";
+import { getHashlock } from "../utils/blockchain";
+import { randomBytes } from "crypto";
 
 const { Option } = Select;
 
 class CreateOrder extends Component {
+  state = {
+    createdOrderData: {}
+  };
+
+  generateSecret = () => {
+    return randomBytes(48).toString("hex");
+  };
+
   handleFormSubmit = async (values, formActions) => {
-    const account = await getOntologyAccount();
+    const { user } = this.props;
+    const secret = this.generateSecret();
+    const hashlock = getHashlock(secret);
+    console.log(secret, hashlock);
+    // 086e143d4dc3ddca6dfd8075163d6e06be4580407471b75025867be9ba358d064d5ad73c43f8f4df8ab03de362c9914d
+    // a0f9924f473606a6445fbc2507d265eb360fed5abdeb3cfc5a1a43ad1e831d36
     try {
-      const secret = 'secret';
-      createOrderSellOnt(values.ontAmount, values.ethAmount, secret, account);
-      // get_initiator(secret);
+      const result = await createOrderSellOnt(
+        values.ontAmount,
+        values.ethAmount,
+        hashlock,
+        user
+      );
+      console.log(result);
+      if (result.Error === 0) {
+        this.setState({
+          createdOrderData: {
+            secret: secret,
+            hashlock: hashlock
+          }
+        });
+      }
     } catch (e) {
       console.log(e);
     }
     formActions.setSubmitting(false);
-  }
-
-  getInitiator = async () => {
-    try {
-      const secret = 'secret22';
-      get_initiator(secret);
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-
+  };
 
   handleAssetToSellChange = setFieldValue => value => {
     setFieldValue("assetToSell", value);
   };
 
   render() {
-    const assetsToSell = ['ont', /* 'eth' */];
+    const assetsToSell = ["ont" /* 'eth' */];
+    const { createdOrderData } = this.state;
+
     return (
       <>
-        <PageHeader title="Сreate order" subTitle="Here you can create the new order to exchange ONT to ETH and vice versa" />
+        <PageHeader
+          title="Сreate order"
+          subTitle="Here you can create the new order to exchange ONT to ETH"
+        />
         <Card style={{ marginTop: 20 }}>
           <Formik
             onSubmit={this.handleFormSubmit}
             initialValues={{
               assetToSell: assetsToSell[0],
-              ontAmount: 120,
-              ethAmount: 0.5,
+              ontAmount: 1,
+              ethAmount: 0.005
             }}
             validate={values => {
               let errors = {};
@@ -64,7 +85,7 @@ class CreateOrder extends Component {
               handleBlur,
               handleSubmit,
               handleChange,
-              setFieldValue,
+              setFieldValue
               // touched,
             }) => {
               const allowToSubmitForm = true;
@@ -85,15 +106,13 @@ class CreateOrder extends Component {
                           onBlur={handleBlur}
                           disabled={isSubmitting}
                         >
-                          {
-                            assetsToSell.map((asset, index) => {
-                              return (
-                                <Option key={index} value={asset}>
-                                  {asset}
-                                </Option>
-                              );
-                            })
-                          }
+                          {assetsToSell.map((asset, index) => {
+                            return (
+                              <Option key={index} value={asset}>
+                                {asset}
+                              </Option>
+                            );
+                          })}
                         </Select>
                       </Form.Item>
                     </Col>
@@ -148,14 +167,6 @@ class CreateOrder extends Component {
                       >
                         Create order
                       </Button>
-
-                      <Button
-                        disabled={!allowToSubmitForm || isSubmitting}
-                        loading={isSubmitting}
-                        onClick={this.getInitiator}
-                      >
-                        Get initiator
-                      </Button>
                     </Col>
                   </Row>
                 </form>
@@ -163,9 +174,27 @@ class CreateOrder extends Component {
             }}
           </Formik>
         </Card>
+        {Object.entries(createdOrderData).length !== 0 ? (
+          <Card style={{ marginTop: 20 }}>
+            <Descriptions title="Please, save this values in order to manipulate your order, otherwise your funds will be lost">
+              <Descriptions.Item label="Hashlock">
+                {createdOrderData.hashlock}
+              </Descriptions.Item>
+            </Descriptions>
+            <Descriptions>
+              <Descriptions.Item label="Secret">
+                {createdOrderData.secret}
+              </Descriptions.Item>
+            </Descriptions>
+          </Card>
+        ) : null}
       </>
     );
   }
 }
 
-export default CreateOrder;
+export default connect(state => {
+  return {
+    user: state.user
+  };
+})(CreateOrder);
