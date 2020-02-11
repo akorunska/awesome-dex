@@ -1,10 +1,5 @@
 import { ontologyExchangeContractSellOnt, ethDecimals } from "./constants";
-import {
-  addSignAndSendTrx,
-  sendTrx,
-  createTrx,
-  deserializePrivateKey
-} from "./bc";
+import { addSignAndSendTrx, createTrx, deserializePrivateKey } from "./bc";
 import { cryptoAddress } from "../utils/blockchain";
 
 export async function createOrderSellOnt(

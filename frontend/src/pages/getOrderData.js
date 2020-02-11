@@ -31,16 +31,6 @@ class GetOrderData extends Component {
     formActions.setSubmitting(false);
   };
 
-  getInitiator = async () => {
-    // const { user } = this.props;
-
-    try {
-      // console.log(await get_initiator(secret, user));
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   render() {
     const { ontologyContractOrderData } = this.state;
     return (

@@ -2,14 +2,18 @@ import React, { Component } from "react";
 import { PageHeader, Button } from "antd";
 import { connect } from "react-redux";
 import { Formik } from "formik";
-import { createOrderSellOnt, get_initiator } from "../api/createOrder";
-import { Row, Col, Form, Select, Input, Card } from "antd";
+import { createOrderSellOnt } from "../api/createOrder";
+import { Row, Col, Form, Select, Input, Card, Descriptions } from "antd";
 import { getHashlock } from "../utils/blockchain";
 import { randomBytes } from "crypto";
 
 const { Option } = Select;
 
 class CreateOrder extends Component {
+  state = {
+    createdOrderData: {}
+  };
+
   generateSecret = () => {
     return randomBytes(48).toString("hex");
   };
@@ -29,6 +33,14 @@ class CreateOrder extends Component {
         user
       );
       console.log(result);
+      if (result.Error === 0) {
+        this.setState({
+          createdOrderData: {
+            secret: secret,
+            hashlock: hashlock
+          }
+        });
+      }
     } catch (e) {
       console.log(e);
     }
@@ -41,6 +53,8 @@ class CreateOrder extends Component {
 
   render() {
     const assetsToSell = ["ont" /* 'eth' */];
+    const { createdOrderData } = this.state;
+
     return (
       <>
         <PageHeader
@@ -160,6 +174,20 @@ class CreateOrder extends Component {
             }}
           </Formik>
         </Card>
+        {Object.entries(createdOrderData).length !== 0 ? (
+          <Card style={{ marginTop: 20 }}>
+            <Descriptions title="Please, save this values in order to manipulate your order, otherwise your funds will be lost">
+              <Descriptions.Item label="Hashlock">
+                {createdOrderData.hashlock}
+              </Descriptions.Item>
+            </Descriptions>
+            <Descriptions>
+              <Descriptions.Item label="Secret">
+                {createdOrderData.secret}
+              </Descriptions.Item>
+            </Descriptions>
+          </Card>
+        ) : null}
       </>
     );
   }
