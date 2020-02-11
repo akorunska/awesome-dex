@@ -1,11 +1,24 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { PageHeader, Button, Row, Col, Form, Input, Card } from "antd";
 import { Formik } from "formik";
+import { getOrderDataOnt } from "../api/getOrderData";
+import { respondToOrderBuyOnt } from "../api/respondToOrder";
 
 class RespondToOrder extends Component {
   handleFormSubmit = async (values, formActions) => {
     try {
-      console.log(values.hashlock);
+      const { user } = this.props;
+
+      const orderData = await getOrderDataOnt(values.hashlock);
+      if (orderData.initiator !== "") {
+        const result = await respondToOrderBuyOnt(
+          "0x" + values.hashlock,
+          orderData.amountOfEthToBuy * 10 ** 8,
+          user
+        );
+        console.log(result);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -86,4 +99,8 @@ class RespondToOrder extends Component {
   }
 }
 
-export default RespondToOrder;
+export default connect(state => {
+  return {
+    user: state.user
+  };
+})(RespondToOrder);

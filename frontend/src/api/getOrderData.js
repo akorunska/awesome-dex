@@ -3,8 +3,7 @@ import { sendTrx, createTrx } from "./bc";
 import { utils } from "ontology-ts-sdk";
 import { get } from "lodash";
 
-// f621b7540089c6194b370608dc3116a1c555a64c98801e2cdfc1a900adc15ca2
-export async function getOrderData(hashlock) {
+export async function getOrderDataOnt(hashlock) {
   try {
     const initiator = await getInitiator(hashlock);
     const amountOfOntToSell = await getAmountOfOntToSell(hashlock);
