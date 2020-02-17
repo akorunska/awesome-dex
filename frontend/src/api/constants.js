@@ -1,5 +1,3 @@
-import PrivateKey from "ontology-ts-sdk";
-
 export const ontologyExchangeContractSellOnt =
   "14972f644a4c43a9e097ee55968f877ce799754d";
 export const ethereumExchangeContractSellOnt =
@@ -71,11 +69,126 @@ export const layoutPermissionsByUser = {
 };
 
 // export const ontNodeEndpoint = "http://" + "127.0.0.1" + ":20334";
-export const ontNodeEndpoint = "http://" + "polaris1.ont.io" + ":20334";
+export const ontNodeEndpoint = "http://polaris1.ont.io:20334";
 
 export const notifyTimeout = 30000;
 
 export const ethDecimals = 10 ** 8;
-
-// export const ontologyExchangeContractSellEth = "";
-// export const ethereumExchangeContractSellEth = "";
+export const ethGasLimit = 2000000;
+export const ethContractJsonInterface = [
+  {
+    constant: false,
+    inputs: [
+      {
+        name: "hashlock",
+        type: "bytes32"
+      },
+      {
+        name: "secret",
+        type: "string"
+      }
+    ],
+    name: "claimEth",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        name: "hashlock",
+        type: "bytes32"
+      },
+      {
+        name: "amountEthToLock",
+        type: "uint256"
+      }
+    ],
+    name: "respondToOrder",
+    outputs: [],
+    payable: true,
+    stateMutability: "payable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        name: "hashlock",
+        type: "bytes32"
+      }
+    ],
+    name: "refundEth",
+    outputs: [],
+    payable: true,
+    stateMutability: "payable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        name: "",
+        type: "bytes32"
+      }
+    ],
+    name: "orderList",
+    outputs: [
+      {
+        name: "initiatorAddress",
+        type: "address"
+      },
+      {
+        name: "buyerAddress",
+        type: "address"
+      },
+      {
+        name: "hashlock",
+        type: "bytes32"
+      },
+      {
+        name: "amountEthLocked",
+        type: "uint256"
+      },
+      {
+        name: "refundTimelock",
+        type: "uint256"
+      },
+      {
+        name: "claimTimelock",
+        type: "uint256"
+      },
+      {
+        name: "secret",
+        type: "string"
+      },
+      {
+        name: "status",
+        type: "uint8"
+      }
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        name: "hashlock",
+        type: "bytes32"
+      },
+      {
+        name: "initiatorAddress",
+        type: "address"
+      }
+    ],
+    name: "lockIntiatorAddress",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  }
+];

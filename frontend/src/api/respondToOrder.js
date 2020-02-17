@@ -1,132 +1,16 @@
-import { ethereumExchangeContractSellOnt } from "./constants";
+import {
+  ethereumExchangeContractSellOnt,
+  ethContractJsonInterface,
+  ethDecimals,
+  ethGasLimit
+} from "./constants";
 import Web3 from "web3";
-// import Tx from "ethereumjs-tx";
 const Tx = require("ethereumjs-tx").Transaction;
-
-// const { Transaction } = Tx;
 
 let web3 = new Web3(Web3.givenProvider);
 
-const jsonInterface = [
-  {
-    constant: false,
-    inputs: [
-      {
-        name: "hashlock",
-        type: "bytes32"
-      },
-      {
-        name: "secret",
-        type: "string"
-      }
-    ],
-    name: "claimEth",
-    outputs: [],
-    payable: false,
-    stateMutability: "nonpayable",
-    type: "function"
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: "hashlock",
-        type: "bytes32"
-      },
-      {
-        name: "amountEthToLock",
-        type: "uint256"
-      }
-    ],
-    name: "respondToOrder",
-    outputs: [],
-    payable: true,
-    stateMutability: "payable",
-    type: "function"
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: "hashlock",
-        type: "bytes32"
-      }
-    ],
-    name: "refundEth",
-    outputs: [],
-    payable: true,
-    stateMutability: "payable",
-    type: "function"
-  },
-  {
-    constant: true,
-    inputs: [
-      {
-        name: "",
-        type: "bytes32"
-      }
-    ],
-    name: "orderList",
-    outputs: [
-      {
-        name: "initiatorAddress",
-        type: "address"
-      },
-      {
-        name: "buyerAddress",
-        type: "address"
-      },
-      {
-        name: "hashlock",
-        type: "bytes32"
-      },
-      {
-        name: "amountEthLocked",
-        type: "uint256"
-      },
-      {
-        name: "refundTimelock",
-        type: "uint256"
-      },
-      {
-        name: "claimTimelock",
-        type: "uint256"
-      },
-      {
-        name: "secret",
-        type: "string"
-      },
-      {
-        name: "status",
-        type: "uint8"
-      }
-    ],
-    payable: false,
-    stateMutability: "view",
-    type: "function"
-  },
-  {
-    constant: false,
-    inputs: [
-      {
-        name: "hashlock",
-        type: "bytes32"
-      },
-      {
-        name: "initiatorAddress",
-        type: "address"
-      }
-    ],
-    name: "lockIntiatorAddress",
-    outputs: [],
-    payable: false,
-    stateMutability: "nonpayable",
-    type: "function"
-  }
-];
-
 const exchangeContract = new web3.eth.Contract(
-  jsonInterface,
+  ethContractJsonInterface,
   ethereumExchangeContractSellOnt
 );
 
@@ -137,18 +21,21 @@ export async function respondToOrderBuyOnt(
 ) {
   const respondToOrder = exchangeContract.methods.respondToOrder(
     hashlock,
-    amountOfEthToLock
+    amountOfEthToLock * ethDecimals
   );
   const encodedABI = respondToOrder.encodeABI();
+  const currentGasPrice = parseInt(await web3.eth.getGasPrice());
+  const txCount = await web3.eth.getTransactionCount(sender.ethAddress);
   const rawTx = {
+    nonce: "0x" + txCount.toString(16),
     from: sender.ethAddress,
     to: ethereumExchangeContractSellOnt,
-    gas: 2000000,
+    gas: "0x" + ethGasLimit.toString(16),
+    gasPrice: "0x" + currentGasPrice.toString(16),
     data: encodedABI,
-    value: "0x00" // todo send eth
+    value: "0x" + (amountOfEthToLock * ethDecimals).toString(16)
   };
-
-  const tx = new Tx(rawTx);
+  const tx = new Tx(rawTx, { chain: "ropsten" });
   const privateKey = new Buffer(sender.ethPrivKey, "hex");
   tx.sign(privateKey);
   const serializedTx = tx.serialize();
