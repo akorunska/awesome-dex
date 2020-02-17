@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import {
   PageHeader,
   Button,
@@ -11,12 +10,13 @@ import {
   Descriptions
 } from "antd";
 import { Formik } from "formik";
-import { getOrderDataOnt } from "../api/getOrderData";
+import { getOrderDataOnt, getOrderDataEth } from "../api/getOrderData";
 
 // Please, save this values in order to manipulate your order, otherwise your funds will be lost
 // Hashlock 6a43d42c221892f19dcab3b93675718fdaaa5c97717d20d72729e89c15bef87a
 // Secret f0c91f4aa5a5609af6277fc928deef646a72bac19c8f582f79695587fbeeca899564beaf5eb88ea64908cf5ba7957026
 
+// a0f9924f473606a6445fbc2507d265eb360fed5abdeb3cfc5a1a43ad1e831d36
 class GetOrderData extends Component {
   state = {
     ontologyContractOrderData: {},
@@ -25,9 +25,12 @@ class GetOrderData extends Component {
 
   handleFormSubmit = async (values, formActions) => {
     try {
-      const result = await getOrderDataOnt(values.hashlock);
-      console.log("received result: ", result);
-      this.setState({ ontologyContractOrderData: result });
+      const resultOnt = await getOrderDataOnt(values.hashlock);
+      const resultEth = await getOrderDataEth("0x" + values.hashlock);
+      console.log("received result ont: ", resultOnt);
+      console.log("received result eth: ", resultEth);
+      this.setState({ ontologyContractOrderData: resultOnt });
+      this.setState({ ethereumContractOrderData: resultEth });
     } catch (e) {
       console.log(e);
     }
@@ -35,7 +38,7 @@ class GetOrderData extends Component {
   };
 
   render() {
-    const { ontologyContractOrderData } = this.state;
+    const { ontologyContractOrderData, ethereumContractOrderData } = this.state;
     return (
       <>
         <PageHeader
@@ -46,7 +49,8 @@ class GetOrderData extends Component {
           <Formik
             onSubmit={this.handleFormSubmit}
             initialValues={{
-              hashlock: ""
+              hashlock:
+                "a0f9924f473606a6445fbc2507d265eb360fed5abdeb3cfc5a1a43ad1e831d36"
             }}
             validate={values => {
               let errors = {};
@@ -106,7 +110,7 @@ class GetOrderData extends Component {
         </Card>
 
         {Object.entries(ontologyContractOrderData).length !== 0 ? (
-          <Card>
+          <Card style={{ marginTop: 20 }}>
             <Descriptions title="Ontology contract info">
               <Descriptions.Item label="Intiator">
                 {ontologyContractOrderData.initiator}
@@ -120,13 +124,25 @@ class GetOrderData extends Component {
             </Descriptions>
           </Card>
         ) : null}
+
+        {Object.entries(ethereumContractOrderData).length !== 0 ? (
+          <Card style={{ marginTop: 20 }}>
+            <Descriptions title="Ethereum contract info">
+              <Descriptions.Item label="Intiator">
+                {ethereumContractOrderData.initiator}
+              </Descriptions.Item>
+              <Descriptions.Item label="Amount of eth lockerd">
+                {ethereumContractOrderData.amountEthLocked}
+              </Descriptions.Item>
+              <Descriptions.Item label="Amount of eth to buy">
+                {ethereumContractOrderData.amountOfEthToBuy}
+              </Descriptions.Item>
+            </Descriptions>
+          </Card>
+        ) : null}
       </>
     );
   }
 }
 
-export default connect(state => {
-  return {
-    user: state.user
-  };
-})(GetOrderData);
+export default GetOrderData;

@@ -1,13 +1,30 @@
-import { ontologyExchangeContractSellOnt, ethDecimals } from "./constants";
 import { sendTrx, createTrx } from "./bc";
 import { utils } from "ontology-ts-sdk";
 import { get } from "lodash";
+import Web3 from "web3";
+import {
+  ethereumExchangeContractSellOnt,
+  ontologyExchangeContractSellOnt,
+  ethContractJsonInterface,
+  ethDecimals
+} from "./constants";
+
+let web3 = new Web3(Web3.givenProvider);
+
+const exchangeContract = new web3.eth.Contract(
+  ethContractJsonInterface,
+  ethereumExchangeContractSellOnt
+);
+
+export async function getOrderDataEth(hashlock) {
+  return exchangeContract.methods.orderList(hashlock).call();
+}
 
 export async function getOrderDataOnt(hashlock) {
   try {
-    const initiator = await getInitiator(hashlock);
-    const amountOfOntToSell = await getAmountOfOntToSell(hashlock);
-    const amountOfEthToBuy = await getAmountOfEthToBuy(hashlock);
+    const initiator = await getInitiatorOnt(hashlock);
+    const amountOfOntToSell = await getAmountOfOntToSellOnt(hashlock);
+    const amountOfEthToBuy = await getAmountOfEthToBuyOnt(hashlock);
 
     return {
       initiator: initiator,
@@ -19,7 +36,7 @@ export async function getOrderDataOnt(hashlock) {
   }
 }
 
-export async function getInitiator(hashlock) {
+export async function getInitiatorOnt(hashlock) {
   try {
     const scriptHash = ontologyExchangeContractSellOnt;
     const operation = "get_initiator";
@@ -32,7 +49,7 @@ export async function getInitiator(hashlock) {
   }
 }
 
-export async function getAmountOfOntToSell(hashlock) {
+export async function getAmountOfOntToSellOnt(hashlock) {
   try {
     const scriptHash = ontologyExchangeContractSellOnt;
     const operation = "get_amount_of_ont_to_sell";
@@ -46,7 +63,7 @@ export async function getAmountOfOntToSell(hashlock) {
   }
 }
 
-export async function getAmountOfEthToBuy(hashlock) {
+export async function getAmountOfEthToBuyOnt(hashlock) {
   try {
     const scriptHash = ontologyExchangeContractSellOnt;
     const operation = "get_amount_of_eth_to_buy";
