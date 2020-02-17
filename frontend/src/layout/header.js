@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
 import styled from "styled-components";
-import { Layout, Typography, Radio } from "antd";
+import { Layout, Typography } from "antd";
 import ToggleUser from "./toggleUser";
-import { users } from "../api/constants";
-import Actions from "../redux/actions";
 
 const { Header } = Layout;
 const { Title } = Typography;
