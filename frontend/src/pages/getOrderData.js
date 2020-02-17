@@ -12,11 +12,6 @@ import {
 import { Formik } from "formik";
 import { getOrderDataOnt, getOrderDataEth } from "../api/getOrderData";
 
-// Please, save this values in order to manipulate your order, otherwise your funds will be lost
-// Hashlock 6a43d42c221892f19dcab3b93675718fdaaa5c97717d20d72729e89c15bef87a
-// Secret f0c91f4aa5a5609af6277fc928deef646a72bac19c8f582f79695587fbeeca899564beaf5eb88ea64908cf5ba7957026
-
-// a0f9924f473606a6445fbc2507d265eb360fed5abdeb3cfc5a1a43ad1e831d36
 class GetOrderData extends Component {
   state = {
     ontologyContractOrderData: {},

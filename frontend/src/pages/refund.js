@@ -11,26 +11,44 @@ import {
   notification
 } from "antd";
 import { Formik } from "formik";
-import { getOrderDataOnt } from "../api/getOrderData";
-import { respondToOrderBuyOnt } from "../api/respondToOrder";
+import { refundOnt, refundEth } from "../api/refund";
+// import { respondToOrderBuyOnt } from "../api/respondToOrder";
 
-class RespondToOrder extends Component {
+const handleRefundOnt = async (user, hashlock) => {
+  const result = await refundOnt(hashlock, user);
+  if (result.Error === 0) {
+    return result;
+  }
+  throw new Error(result.Result);
+};
+
+const handleRefundEth = async (user, hashlock) => {
+  const result = await refundEth("0x" + hashlock, user);
+  return result;
+};
+
+const userToRefundHandler = {
+  alice: {
+    label: "Refund ONT",
+    handler: handleRefundOnt
+  },
+  bob: {
+    label: "Refund ETH",
+    handler: handleRefundEth
+  }
+};
+
+class Refund extends Component {
   handleFormSubmit = async (values, formActions) => {
     try {
       const { user } = this.props;
 
-      const orderData = await getOrderDataOnt(values.hashlock);
-      if (orderData.initiator !== "") {
-        const result = await respondToOrderBuyOnt(
-          "0x" + values.hashlock,
-          orderData.amountOfEthToBuy * 10 ** 8,
-          user
-        );
-        console.log(result);
-        notification["success"]({
-          message: "Operation successful"
-        });
-      }
+      const { handler } = userToRefundHandler[user.name];
+      const result = await handler(user, values.hashlock);
+      console.log(result);
+      notification["success"]({
+        message: "Operation successful"
+      });
     } catch (e) {
       console.log(e);
       notification["error"]({
@@ -42,11 +60,14 @@ class RespondToOrder extends Component {
   };
 
   render() {
+    const { user } = this.props;
+    const { label } = userToRefundHandler[user.name];
+
     return (
       <>
         <PageHeader
-          title="Respond to order"
-          subTitle="Here you can respond to order by entering its hashlock"
+          title="Cancel and refund"
+          subTitle="Here you can refund assets from the smart contract"
         />
         <Card style={{ marginTop: 20 }}>
           <Formik
@@ -100,7 +121,7 @@ class RespondToOrder extends Component {
                           disabled={!allowToSubmitForm || isSubmitting}
                           loading={isSubmitting}
                         >
-                          Respond to order
+                          {label}
                         </Button>
                       </Form.Item>
                     </Col>
@@ -119,4 +140,4 @@ export default connect(state => {
   return {
     user: state.user
   };
-})(RespondToOrder);
+})(Refund);

@@ -45,7 +45,7 @@ export const layoutPermissionsByUser = {
     },
     {
       displayName: "Cancel and refund",
-      route: "#"
+      route: "/refund"
     }
   ],
   bob: [
@@ -63,7 +63,7 @@ export const layoutPermissionsByUser = {
     },
     {
       displayName: "Cancel and refund",
-      route: "#"
+      route: "/refund"
     }
   ]
 };

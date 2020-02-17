@@ -3,7 +3,16 @@ import { PageHeader, Button } from "antd";
 import { connect } from "react-redux";
 import { Formik } from "formik";
 import { createOrderSellOnt } from "../api/createOrder";
-import { Row, Col, Form, Select, Input, Card, Descriptions } from "antd";
+import {
+  Row,
+  Col,
+  Form,
+  Select,
+  Input,
+  Card,
+  Descriptions,
+  notification
+} from "antd";
 import { getHashlock } from "../utils/blockchain";
 import { randomBytes } from "crypto";
 
@@ -40,9 +49,19 @@ class CreateOrder extends Component {
             hashlock: hashlock
           }
         });
+      } else {
+        console.log(result);
+        notification["error"]({
+          message: "An error occurred",
+          description: "Error when executing smart contract"
+        });
       }
     } catch (e) {
       console.log(e);
+      notification["error"]({
+        message: "An error occurred",
+        description: e.message
+      });
     }
     formActions.setSubmitting(false);
   };
