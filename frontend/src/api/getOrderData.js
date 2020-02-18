@@ -42,6 +42,7 @@ export async function getInitiatorOnt(hashlock) {
     const operation = "get_initiator";
     const args = [{ type: "Hex", value: hashlock }];
     const serializedTrx = await createTrx(operation, args, scriptHash);
+
     const result = await sendTrx(serializedTrx, true, false);
     return get(result, "Result.Result", "0");
   } catch (e) {

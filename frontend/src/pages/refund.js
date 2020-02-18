@@ -12,7 +12,6 @@ import {
 } from "antd";
 import { Formik } from "formik";
 import { refundOnt, refundEth } from "../api/refund";
-// import { respondToOrderBuyOnt } from "../api/respondToOrder";
 
 const handleRefundOnt = async (user, hashlock) => {
   const result = await refundOnt(hashlock, user);
@@ -84,16 +83,7 @@ class Refund extends Component {
               return errors;
             }}
           >
-            {({
-              values,
-              errors,
-              isSubmitting,
-              handleBlur,
-              handleSubmit,
-              handleChange,
-              setFieldValue
-              // touched,
-            }) => {
+            {({ values, errors, isSubmitting, handleSubmit, handleChange }) => {
               const allowToSubmitForm = true;
               return (
                 <form onSubmit={handleSubmit}>

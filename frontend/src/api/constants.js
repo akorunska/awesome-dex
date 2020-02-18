@@ -68,7 +68,6 @@ export const layoutPermissionsByUser = {
   ]
 };
 
-// export const ontNodeEndpoint = "http://" + "127.0.0.1" + ":20334";
 export const ontNodeEndpoint = "http://polaris1.ont.io:20334";
 
 export const notifyTimeout = 30000;

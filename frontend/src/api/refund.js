@@ -18,24 +18,20 @@ const exchangeContract = new web3.eth.Contract(
 );
 
 export async function refundOnt(hashlock, sender) {
-  try {
-    const scriptHash = ontologyExchangeContractSellOnt;
-    const operation = "refund";
-    const { ontAddress, ontPrivKey } = sender;
-    const args = [{ type: "Hex", value: hashlock }];
-    const serializedTrx = await createTrx(
-      operation,
-      args,
-      scriptHash,
-      cryptoAddress(ontAddress)
-    );
-    return await addSignAndSendTrx(
-      serializedTrx,
-      deserializePrivateKey(ontPrivKey)
-    );
-  } catch (e) {
-    console.log(e);
-  }
+  const scriptHash = ontologyExchangeContractSellOnt;
+  const operation = "refund";
+  const { ontAddress, ontPrivKey } = sender;
+  const args = [{ type: "Hex", value: hashlock }];
+  const serializedTrx = await createTrx(
+    operation,
+    args,
+    scriptHash,
+    cryptoAddress(ontAddress)
+  );
+  return await addSignAndSendTrx(
+    serializedTrx,
+    deserializePrivateKey(ontPrivKey)
+  );
 }
 
 export async function refundEth(hashlock, sender) {

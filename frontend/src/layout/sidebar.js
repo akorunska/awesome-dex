@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { Layout } from "antd";
 import { Menu } from "antd";
 import { layoutPermissionsByUser } from "../api/constants";
@@ -8,7 +8,9 @@ import { layoutPermissionsByUser } from "../api/constants";
 // const SubMenu = Menu.SubMenu;
 const { Sider } = Layout;
 
-class Sidebar extends Component {
+const Sidebar = withRouter(props => <RoutedSidebar {...props} />);
+
+class RoutedSidebar extends Component {
   state = {
     collapsed: false
   };
@@ -21,6 +23,7 @@ class Sidebar extends Component {
 
   getSiderLayout = () => {
     const { user } = this.props;
+
     const layoutItems = [];
 
     for (let layoutItem of layoutPermissionsByUser[user.name]) {
@@ -36,15 +39,16 @@ class Sidebar extends Component {
   };
 
   render() {
+    const { pathname } = this.props.location === "" ? "/" : this.props.location;
+
     return (
       <Sider
         className="sidebar"
         collapsible
         collapsed={this.state.collapsed}
         onCollapse={this.handleCollapse}
-        // width="240"
       >
-        <Menu theme="dark" mode="inline">
+        <Menu theme="dark" mode="inline" selectedKeys={[pathname]}>
           {this.getSiderLayout()}
         </Menu>
       </Sider>

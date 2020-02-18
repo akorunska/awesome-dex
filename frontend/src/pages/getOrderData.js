@@ -56,16 +56,7 @@ class GetOrderData extends Component {
               return errors;
             }}
           >
-            {({
-              values,
-              errors,
-              isSubmitting,
-              handleBlur,
-              handleSubmit,
-              handleChange,
-              setFieldValue
-              // touched,
-            }) => {
+            {({ values, errors, isSubmitting, handleSubmit, handleChange }) => {
               const allowToSubmitForm = true;
               return (
                 <form onSubmit={handleSubmit}>
