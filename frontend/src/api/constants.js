@@ -48,6 +48,10 @@ export const layoutPermissionsByUser = {
       route: "/refund"
     },
     {
+      displayName: "Lock buyer address",
+      route: "/lock-address"
+    },
+    {
       displayName: "Claim ETH",
       route: "/claim"
     }
@@ -68,6 +72,10 @@ export const layoutPermissionsByUser = {
     {
       displayName: "Cancel and refund",
       route: "/refund"
+    },
+    {
+      displayName: "Lock initiator address",
+      route: "/lock-address"
     },
     {
       displayName: "Claim ONT",
