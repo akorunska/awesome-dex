@@ -13,7 +13,7 @@ import {
 import { Formik } from "formik";
 import { claimOnt, claimEth } from "../api/claim";
 
-const handleClaimOnt = async (user, hashlock) => {
+const handleClaimOnt = async (user, hashlock, secret) => {
   const result = await claimOnt(hashlock, user);
   if (result.Error === 0) {
     return result;
@@ -21,8 +21,8 @@ const handleClaimOnt = async (user, hashlock) => {
   throw new Error(result.Result);
 };
 
-const handleClaimEth = async (user, hashlock) => {
-  const result = await claimEth("0x" + hashlock, user);
+const handleClaimEth = async (user, hashlock, secret) => {
+  const result = await claimEth("0x" + hashlock, "0x" + secret, user);
   return result;
 };
 
@@ -41,9 +41,10 @@ class Claim extends Component {
   handleFormSubmit = async (values, formActions) => {
     try {
       const { user } = this.props;
+      const { hashlock, secret } = values;
 
       const { handler } = userToClaimHandler[user.name];
-      const result = await handler(user, values.hashlock);
+      const result = await handler(user, hashlock, secret);
       console.log(result);
       notification["success"]({
         message: "Operation successful"
@@ -72,13 +73,17 @@ class Claim extends Component {
           <Formik
             onSubmit={this.handleFormSubmit}
             initialValues={{
-              hashlock: ""
+              hashlock: "",
+              secret: ""
             }}
             validate={values => {
               let errors = {};
 
               if (!values.hashlock) {
                 errors.hashlock = "Required field";
+              }
+              if (!values.secret) {
+                errors.secret = "Required field";
               }
               return errors;
             }}
@@ -103,6 +108,25 @@ class Claim extends Component {
                         />
                       </Form.Item>
                     </Col>
+                  </Row>
+                  <Row>
+                    <Col lg={14}>
+                      <Form.Item
+                        required
+                        validateStatus={errors.secret ? "error" : ""}
+                        help={errors.secret ? errors.secret : ""}
+                      >
+                        <Input
+                          name="secret"
+                          placeholder="Order secret"
+                          value={values.secret ? values.secret : ""}
+                          onChange={handleChange}
+                          disabled={isSubmitting}
+                        />
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                  <Row>
                     <Col lg={2}>
                       <Form.Item>
                         <Button

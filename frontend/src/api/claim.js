@@ -17,11 +17,14 @@ const exchangeContract = new web3.eth.Contract(
   ethereumExchangeContractSellOnt
 );
 
-export async function claimOnt(hashlock, sender) {
+export async function claimOnt(hashlock, secret, sender) {
   const scriptHash = ontologyExchangeContractSellOnt;
-  const operation = "refund";
+  const operation = "claim";
   const { ontAddress, ontPrivKey } = sender;
-  const args = [{ type: "Hex", value: hashlock }];
+  const args = [
+    { type: "Hex", value: hashlock },
+    { type: "Hex", value: secret }
+  ];
   const serializedTrx = await createTrx(
     operation,
     args,
@@ -34,8 +37,8 @@ export async function claimOnt(hashlock, sender) {
   );
 }
 
-export async function claimEth(hashlock, sender) {
-  const refundEth = exchangeContract.methods.refundEth(hashlock);
+export async function claimEth(hashlock, secret, sender) {
+  const refundEth = exchangeContract.methods.claim(hashlock, secret);
   const encodedABI = refundEth.encodeABI();
   const currentGasPrice = parseInt(await web3.eth.getGasPrice());
   const txCount = await web3.eth.getTransactionCount(sender.ethAddress);
