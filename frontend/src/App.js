@@ -6,6 +6,7 @@ import CreateOrder from "./pages/createOrder";
 import GetOrderData from "./pages/getOrderData";
 import RespondToOrder from "./pages/respondToOrder";
 import Refund from "./pages/refund";
+import Claim from "./pages/claim";
 import AppLayout from "./layout";
 
 function App() {
@@ -13,9 +14,11 @@ function App() {
     <BrowserRouter>
       <AppLayout>
         <Route path="/" exact component={Home}></Route>
-        <Route path="/create-order" exact component={CreateOrder} />
         <Route path="/order-data" exact component={GetOrderData} />
+        <Route path="/create-order" exact component={CreateOrder} />
+        <Route path="/respond-to-order" exact component={RespondToOrder} />
         <Route path="/refund" exact component={Refund} />
+        <Route path="/claim" exact component={Claim} />
       </AppLayout>
     </BrowserRouter>
   );

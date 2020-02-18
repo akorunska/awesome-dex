@@ -46,6 +46,10 @@ export const layoutPermissionsByUser = {
     {
       displayName: "Cancel and refund",
       route: "/refund"
+    },
+    {
+      displayName: "Claim ETH",
+      route: "/claim"
     }
   ],
   bob: [
@@ -64,6 +68,10 @@ export const layoutPermissionsByUser = {
     {
       displayName: "Cancel and refund",
       route: "/refund"
+    },
+    {
+      displayName: "Claim ONT",
+      route: "/claim"
     }
   ]
 };

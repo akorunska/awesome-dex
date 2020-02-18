@@ -61,7 +61,7 @@ class Claim extends Component {
 
   render() {
     const { user } = this.props;
-    const { label } = userToRefundHandler[user.name];
+    const { label } = userToClaimHandler[user.name];
 
     return (
       <>
