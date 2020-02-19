@@ -36,11 +36,11 @@ export const layoutPermissionsByUser = {
       route: "/"
     },
     {
-      displayName: "Create Order",
+      displayName: "Create order",
       route: "/create-order"
     },
     {
-      displayName: "Check Order Data",
+      displayName: "Check order data",
       route: "/order-data"
     },
     {
@@ -66,7 +66,7 @@ export const layoutPermissionsByUser = {
       route: "/respond-to-order"
     },
     {
-      displayName: "Check Order Data",
+      displayName: "Check order data",
       route: "/order-data"
     },
     {

@@ -11,19 +11,19 @@ import {
   notification
 } from "antd";
 import { Formik } from "formik";
-// import { claimOnt, claimEth } from "../api/claim";
+import { lockBuyerAddress, lockIntiatorAddress } from "../api/lockAddress";
 
 const handleLockBuyerAddress = async (user, hashlock, address) => {
-  // const result = await claimOnt(hashlock, user);
-  // if (result.Error === 0) {
-  //   return result;
-  // }
-  // throw new Error(result.Result);
+  const result = await lockBuyerAddress(user, hashlock, address);
+  if (result.Error === 0) {
+    return result;
+  }
+  throw new Error(result.Result);
 };
 
 const handleLockInitiatorAddress = async (user, hashlock, address) => {
-  // const result = await claimEth("0x" + hashlock, "0x" + secret, user);
-  // return result;
+  const result = await lockIntiatorAddress("0x" + hashlock, address, user);
+  return result;
 };
 
 const userToClaimHandler = {

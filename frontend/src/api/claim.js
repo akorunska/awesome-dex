@@ -38,8 +38,8 @@ export async function claimOnt(hashlock, secret, sender) {
 }
 
 export async function claimEth(hashlock, secret, sender) {
-  const refundEth = exchangeContract.methods.claim(hashlock, secret);
-  const encodedABI = refundEth.encodeABI();
+  const claimEth = exchangeContract.methods.claim(hashlock, secret);
+  const encodedABI = claimEth.encodeABI();
   const currentGasPrice = parseInt(await web3.eth.getGasPrice());
   const txCount = await web3.eth.getTransactionCount(sender.ethAddress);
   const rawTx = {
