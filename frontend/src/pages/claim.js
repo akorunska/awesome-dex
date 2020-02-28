@@ -14,7 +14,7 @@ import { Formik } from "formik";
 import { claimOnt, claimEth } from "../api/claim";
 
 const handleClaimOnt = async (user, hashlock, secret) => {
-  const result = await claimOnt(hashlock, user);
+  const result = await claimOnt(hashlock, secret, user);
   if (result.Error === 0) {
     return result;
   }
@@ -22,7 +22,7 @@ const handleClaimOnt = async (user, hashlock, secret) => {
 };
 
 const handleClaimEth = async (user, hashlock, secret) => {
-  const result = await claimEth("0x" + hashlock, "0x" + secret, user);
+  const result = await claimEth("0x" + hashlock, secret, user);
   return result;
 };
 

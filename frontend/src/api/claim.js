@@ -5,7 +5,7 @@ import {
   ethGasLimit
 } from "./constants";
 import { addSignAndSendTrx, createTrx, deserializePrivateKey } from "./bc";
-import { cryptoAddress } from "../utils/blockchain";
+import { cryptoAddress, toUTF8Array } from "../utils/blockchain";
 
 import Web3 from "web3";
 const Tx = require("ethereumjs-tx").Transaction;
@@ -17,13 +17,22 @@ const exchangeContract = new web3.eth.Contract(
   ethereumExchangeContractSellOnt
 );
 
+const compressSecretToHex = secret => {
+  const utf8Arr = toUTF8Array(secret);
+  let result = "";
+  utf8Arr.forEach(value => {
+    result += value.toString(16);
+  });
+  return result;
+};
+
 export async function claimOnt(hashlock, secret, sender) {
   const scriptHash = ontologyExchangeContractSellOnt;
   const operation = "claim";
   const { ontAddress, ontPrivKey } = sender;
   const args = [
     { type: "Hex", value: hashlock },
-    { type: "Hex", value: secret }
+    { type: "Hex", value: compressSecretToHex(secret) }
   ];
   const serializedTrx = await createTrx(
     operation,
@@ -38,7 +47,7 @@ export async function claimOnt(hashlock, secret, sender) {
 }
 
 export async function claimEth(hashlock, secret, sender) {
-  const claimEth = exchangeContract.methods.claim(hashlock, secret);
+  const claimEth = exchangeContract.methods.claimEth(hashlock, secret);
   const encodedABI = claimEth.encodeABI();
   const currentGasPrice = parseInt(await web3.eth.getGasPrice());
   const txCount = await web3.eth.getTransactionCount(sender.ethAddress);

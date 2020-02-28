@@ -86,7 +86,7 @@ class CreateOrder extends Component {
             initialValues={{
               assetToSell: assetsToSell[0],
               ontAmount: 1,
-              ethAmount: 0.005
+              ethAmount: 0.05
             }}
             validate={values => {
               let errors = {};
