@@ -11,11 +11,11 @@ contract Exchange {
     struct respondedOrder {
         address initiatorAddress;
         address buyerAddress;
-        bytes32 hashlock; // maybe not string
+        bytes32 hashlock;
         uint amountEthLocked;
         uint refundTimelock;
         uint claimTimelock;
-        string secret; // maybe not string
+        string secret;
         Status status;
     }
 
@@ -53,6 +53,7 @@ contract Exchange {
         require(sha256(abi.encodePacked(secret)) == hashlock, "Secret does not match the hashlock");
         
         orderList[hashlock].status = Status.Performed;
+        orderList[hashlock].secret = secret;
         msg.sender.transfer(orderList[hashlock].amountEthLocked);
     }
 

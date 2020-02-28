@@ -1,7 +1,7 @@
 export const ontologyExchangeContractSellOnt =
   "14972f644a4c43a9e097ee55968f877ce799754d";
 export const ethereumExchangeContractSellOnt =
-  "0x5d5c45b2a0d5d3c61b3faa0dfaa6228a28cc1ee5";
+  "0x63ec7373b680a630a1852f0567442e05a6200fcb";
 
 export const users = {
   alice: {
