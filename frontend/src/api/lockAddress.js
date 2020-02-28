@@ -35,6 +35,7 @@ export async function lockBuyerAddress(
     scriptHash,
     cryptoAddress(ontAddress)
   );
+
   return await addSignAndSendTrx(
     serializedTrx,
     deserializePrivateKey(ontPrivKey)

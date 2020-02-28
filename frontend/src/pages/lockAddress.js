@@ -14,7 +14,7 @@ import { Formik } from "formik";
 import { lockBuyerAddress, lockIntiatorAddress } from "../api/lockAddress";
 
 const handleLockBuyerAddress = async (user, hashlock, address) => {
-  const result = await lockBuyerAddress(user, hashlock, address);
+  const result = await lockBuyerAddress(hashlock, address, user);
   if (result.Error === 0) {
     return result;
   }
@@ -30,11 +30,13 @@ const userToClaimHandler = {
   alice: {
     label: "Lock buyer address",
     addressInputPlaceholder: "Buyer Ontology address",
+    partyAddressDefault: "04f57cb174af1feb5d7a34197ea72621778c8988",
     handler: handleLockBuyerAddress
   },
   bob: {
     label: "Lock initiator address",
     addressInputPlaceholder: "Initiator Ethereum address",
+    partyAddressDefault: "0x174315c0039f0160E12FB3AC96A7D18D61B1A714",
     handler: handleLockInitiatorAddress
   }
 };
@@ -63,7 +65,11 @@ class LockAddress extends Component {
 
   render() {
     const { user } = this.props;
-    const { label, addressInputPlaceholder } = userToClaimHandler[user.name];
+    const {
+      label,
+      addressInputPlaceholder,
+      partyAddressDefault
+    } = userToClaimHandler[user.name];
 
     return (
       <>
@@ -76,7 +82,7 @@ class LockAddress extends Component {
             onSubmit={this.handleFormSubmit}
             initialValues={{
               hashlock: "",
-              secret: ""
+              partyAddress: partyAddressDefault
             }}
             validate={values => {
               let errors = {};
