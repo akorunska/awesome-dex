@@ -17,19 +17,25 @@ const exchangeContract = new web3.eth.Contract(
 );
 
 export async function getOrderDataEth(hashlock) {
-  return exchangeContract.methods.orderList(hashlock).call();
+  let result = exchangeContract.methods.orderList(hashlock).call();
+  result.amountEthLocked = result.amountEthLocked / ethDecimals;
+  return result;
 }
 
 export async function getOrderDataOnt(hashlock) {
   try {
     const initiator = await getInitiatorOnt(hashlock);
+    const buyer = await getBuyerOnt(hashlock);
     const amountOfOntToSell = await getAmountOfOntToSellOnt(hashlock);
     const amountOfEthToBuy = await getAmountOfEthToBuyOnt(hashlock);
+    const refundTimelock = await getRefundTimelockOnt(hashlock);
 
     return {
       initiator: initiator,
+      buyer: buyer,
       amountOfOntToSell: amountOfOntToSell,
-      amountOfEthToBuy: amountOfEthToBuy
+      amountOfEthToBuy: amountOfEthToBuy,
+      refundTimelock: refundTimelock
     };
   } catch (e) {
     console.log(e);
@@ -43,6 +49,18 @@ export async function getInitiatorOnt(hashlock) {
     const args = [{ type: "Hex", value: hashlock }];
     const serializedTrx = await createTrx(operation, args, scriptHash);
 
+    const result = await sendTrx(serializedTrx, true, false);
+    return get(result, "Result.Result", "0");
+  } catch (e) {
+    console.log(e);
+  }
+}
+export async function getBuyerOnt(hashlock) {
+  try {
+    const scriptHash = ontologyExchangeContractSellOnt;
+    const operation = "get_buyer";
+    const args = [{ type: "Hex", value: hashlock }];
+    const serializedTrx = await createTrx(operation, args, scriptHash);
     const result = await sendTrx(serializedTrx, true, false);
     return get(result, "Result.Result", "0");
   } catch (e) {
@@ -73,6 +91,20 @@ export async function getAmountOfEthToBuyOnt(hashlock) {
     const result = await sendTrx(serializedTrx, true, false);
     const value = get(result, "Result.Result", "0");
     return parseInt(utils.reverseHex(value), 16) / ethDecimals;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+export async function getRefundTimelockOnt(hashlock) {
+  try {
+    const scriptHash = ontologyExchangeContractSellOnt;
+    const operation = "get_refund_timelock";
+    const args = [{ type: "Hex", value: hashlock }];
+    const serializedTrx = await createTrx(operation, args, scriptHash);
+    const result = await sendTrx(serializedTrx, true, false);
+    const value = get(result, "Result.Result", "0");
+    return parseInt(utils.reverseHex(value), 16);
   } catch (e) {
     console.log(e);
   }

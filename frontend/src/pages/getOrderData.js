@@ -34,6 +34,7 @@ class GetOrderData extends Component {
 
   render() {
     const { ontologyContractOrderData, ethereumContractOrderData } = this.state;
+
     return (
       <>
         <PageHeader
@@ -44,8 +45,7 @@ class GetOrderData extends Component {
           <Formik
             onSubmit={this.handleFormSubmit}
             initialValues={{
-              hashlock:
-                "a0f9924f473606a6445fbc2507d265eb360fed5abdeb3cfc5a1a43ad1e831d36"
+              hashlock: ""
             }}
             validate={values => {
               let errors = {};
@@ -98,14 +98,22 @@ class GetOrderData extends Component {
         {Object.entries(ontologyContractOrderData).length !== 0 ? (
           <Card style={{ marginTop: 20 }}>
             <Descriptions title="Ontology contract info">
-              <Descriptions.Item label="Intiator">
+              <Descriptions.Item label="Initiator">
                 {ontologyContractOrderData.initiator}
+              </Descriptions.Item>
+              <Descriptions.Item label="Buyer">
+                {ontologyContractOrderData.buyer}
               </Descriptions.Item>
               <Descriptions.Item label="Amount of ont to sell">
                 {ontologyContractOrderData.amountOfOntToSell}
               </Descriptions.Item>
               <Descriptions.Item label="Amount of eth to buy">
                 {ontologyContractOrderData.amountOfEthToBuy}
+              </Descriptions.Item>
+              <Descriptions.Item label="Refund timelock">
+                {new Date(
+                  ontologyContractOrderData.refundTimelock * 1000
+                ).toISOString()}
               </Descriptions.Item>
             </Descriptions>
           </Card>
@@ -114,14 +122,34 @@ class GetOrderData extends Component {
         {Object.entries(ethereumContractOrderData).length !== 0 ? (
           <Card style={{ marginTop: 20 }}>
             <Descriptions title="Ethereum contract info">
-              <Descriptions.Item label="Intiator">
-                {ethereumContractOrderData.initiator}
+              <Descriptions.Item label="Initiator">
+                {ethereumContractOrderData.initiatorAddress}
               </Descriptions.Item>
-              <Descriptions.Item label="Amount of eth lockerd">
+              <Descriptions.Item label="Buyer">
+                {ethereumContractOrderData.buyerAddress}
+              </Descriptions.Item>
+              <Descriptions.Item label="Amount of eth locked">
                 {ethereumContractOrderData.amountEthLocked}
               </Descriptions.Item>
-              <Descriptions.Item label="Amount of eth to buy">
-                {ethereumContractOrderData.amountOfEthToBuy}
+              <Descriptions.Item label="Refund timelock">
+                {new Date(
+                  ethereumContractOrderData.refundTimelock * 1000
+                ).toISOString()}
+              </Descriptions.Item>
+              <Descriptions.Item label="Claim timelock">
+                {new Date(
+                  ethereumContractOrderData.claimTimelock * 1000
+                ).toISOString()}
+              </Descriptions.Item>
+            </Descriptions>
+          </Card>
+        ) : null}
+
+        {ethereumContractOrderData.secret ? (
+          <Card style={{ marginTop: 20 }}>
+            <Descriptions title="The secret was revealed">
+              <Descriptions.Item label="Secret">
+                {ethereumContractOrderData.secret}
               </Descriptions.Item>
             </Descriptions>
           </Card>
