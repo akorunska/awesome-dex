@@ -23,7 +23,7 @@ class RespondToOrder extends Component {
       if (orderData.initiator !== "") {
         const result = await respondToOrderBuyOnt(
           "0x" + values.hashlock,
-          orderData.amountOfEthToBuy * 10 ** 8,
+          orderData.amountOfEthToBuy,
           user
         );
         console.log(result);
