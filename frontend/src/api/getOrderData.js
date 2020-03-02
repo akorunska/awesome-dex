@@ -17,7 +17,7 @@ const exchangeContract = new web3.eth.Contract(
 );
 
 export async function getOrderDataEth(hashlock) {
-  let result = exchangeContract.methods.orderList(hashlock).call();
+  let result = await exchangeContract.methods.orderList(hashlock).call();
   result.amountEthLocked = result.amountEthLocked / ethDecimals;
   return result;
 }
