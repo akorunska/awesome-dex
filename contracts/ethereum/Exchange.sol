@@ -22,14 +22,12 @@ contract Exchange {
     mapping (bytes32 => respondedOrder) public orderList; // hashlock => order data
     uint timelockDuration = 10; // set to 10 seconds for testing purposes, should be 60*60*24;
 
-    function respondToOrder (bytes32 hashlock, uint amountEthToLock) public payable {
-        require(msg.value == amountEthToLock, "Insufficient amount of ETH provided");
-
+    function respondToOrder (bytes32 hashlock) public payable {
         orderList[hashlock] = respondedOrder({
             buyerAddress: address(msg.sender),
             initiatorAddress: address(0),
             hashlock: hashlock,
-            amountEthLocked: amountEthToLock,
+            amountEthLocked: msg.value,
             refundTimelock: 0,
             claimTimelock: 0,
             secret: "",

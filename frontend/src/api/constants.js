@@ -1,7 +1,7 @@
 export const ontologyExchangeContractSellOnt =
   "14972f644a4c43a9e097ee55968f877ce799754d";
 export const ethereumExchangeContractSellOnt =
-  "0x63ec7373b680a630a1852f0567442e05a6200fcb";
+  "0x6ad25cb063bc6ebbc7a0ed66cbb91aa4c7fad86e";
 
 export const users = {
   alice: {
@@ -88,7 +88,7 @@ export const ontNodeEndpoint = "http://polaris1.ont.io:20334";
 
 export const notifyTimeout = 30000;
 
-export const ethDecimals = 10 ** 8;
+export const ethDecimals = 10 ** 18;
 export const ethGasLimit = 2000000;
 export const ethContractJsonInterface = [
   {
@@ -115,13 +115,9 @@ export const ethContractJsonInterface = [
       {
         name: "hashlock",
         type: "bytes32"
-      },
-      {
-        name: "amountEthToLock",
-        type: "uint256"
       }
     ],
-    name: "respondToOrder",
+    name: "refundEth",
     outputs: [],
     payable: true,
     stateMutability: "payable",
@@ -135,7 +131,7 @@ export const ethContractJsonInterface = [
         type: "bytes32"
       }
     ],
-    name: "refundEth",
+    name: "respondToOrder",
     outputs: [],
     payable: true,
     stateMutability: "payable",

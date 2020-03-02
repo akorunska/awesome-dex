@@ -19,10 +19,7 @@ export async function respondToOrderBuyOnt(
   amountOfEthToLock,
   sender
 ) {
-  const respondToOrder = exchangeContract.methods.respondToOrder(
-    hashlock,
-    amountOfEthToLock * ethDecimals
-  );
+  const respondToOrder = exchangeContract.methods.respondToOrder(hashlock);
   const encodedABI = respondToOrder.encodeABI();
   const currentGasPrice = parseInt(await web3.eth.getGasPrice());
   const txCount = await web3.eth.getTransactionCount(sender.ethAddress);
