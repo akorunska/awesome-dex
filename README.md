@@ -9,6 +9,15 @@ The project consists of several parts:
 
 ## About the demo
 
+#### Setting up
+
+```
+cd frontend
+npm install
+npm start
+```
+The demo can be accessed though `localhost:3000`
+
 #### Notes
 
 Frontend demo is not a fully-functional DEX, but rather a way to facilitate interaction with smart contracts in order to see, how atomic swaps work. 
