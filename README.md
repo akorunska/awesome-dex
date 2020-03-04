@@ -1,11 +1,12 @@
 # awesome-dex
 
-This is a demo prototype, that aims to showcase how Atomic Swaps can be used to build a DEX. 
+This is a demo prototype, that aims to showcase how Atomic Swaps can be used to build a DEX.
 
 The project consists of several parts:
-* `/contracts/ontology` folder contains Ontology SC and unit tests for it
-* `/contracts/ethereum` folder contains Ethereum SC
-* `/frontend` folder contains simple frontend, that allows interacting with smart contracts mentioned above
+
+- `/contracts/ontology` folder contains Ontology SC and unit tests for it
+- `/contracts/ethereum` folder contains Ethereum SC
+- `/frontend` folder contains simple frontend, that allows interacting with smart contracts mentioned above
 
 ## About the demo
 
@@ -16,13 +17,15 @@ cd frontend
 npm install
 npm start
 ```
-The demo can be accessed though `localhost:3000`
+
+The demo can be accessed though `localhost:3000`.
+Before using the demo, please install _Metamask_ extension and set it to Ropsten testnet.
 
 #### Notes
 
-Frontend demo is not a fully-functional DEX, but rather a way to facilitate interaction with smart contracts in order to see, how atomic swaps work. 
+Frontend demo is not a fully-functional DEX, but rather a way to facilitate interaction with smart contracts in order to see, how atomic swaps work.
 
-Prototype interacts with Ontology SC 
+Prototype interacts with Ontology SC
 (deployed to Ontology testnet on `14972f644a4c43a9e097ee55968f877ce799754d`)
 and Ethereum SC (deployed to Ropsten testnet on `0x6ad25cb063bc6ebbc7a0ed66cbb91aa4c7fad86e`).
 
@@ -31,15 +34,15 @@ Private keys and addresses are located on `frontend/src/api/constants` in `users
 Please, note, that you can use that users, but keep in mind, that they are not guaranteed to have sufficient balance of ETH and/or ONT.
 You are welcome to recharge those wallets, but it would be best to replace hardcoded data with your own test accounts.
 
-Demo provides *Check order data* page, that lets checking state of the order.
+Demo provides _Check order data_ page, that lets checking state of the order.
 But it can also be handy to monitor what's going on with SC with testnet block explorers:
 
-* *Ontology:* https://explorer.ont.io/contract/other/4d7599e77c878f9655ee97e0a9434c4a642f9714/10/1/testnet
-* *Ethererum:* https://ropsten.etherscan.io/address/0x6ad25cb063bc6ebbc7a0ed66cbb91aa4c7fad86e
+- _Ontology:_ https://explorer.ont.io/contract/other/4d7599e77c878f9655ee97e0a9434c4a642f9714/10/1/testnet
+- _Ethererum:_ https://ropsten.etherscan.io/address/0x6ad25cb063bc6ebbc7a0ed66cbb91aa4c7fad86e
 
 #### Workflow instruction
 
-To initiate exchange switch to Alice and to go *Create order* page.
+To initiate exchange switch to Alice and to go _Create order_ page.
 
 ![Create order page](screenshots/01.png)
 
@@ -51,20 +54,21 @@ The following message will appear:
 It is important to save this values, otherwise access to those locked ONT will be permanently lost.
 
 Let's assume that following data is safely stored by Alice:
+
 ```
 Hashlock b9d2195fbd4b7a5812498d380b2275e4eb8b939920cc74288fa688f6e0849c93
 
 Secret 97feb4ac885c56dd4bbb454fc1dbb0175e5fe5e66e123d394e83bd357a2d04cf569298d625cbc9799a5db2296e912448
 ```
 
-Now it's time for Bob to respond to Alice's order. 
+Now it's time for Bob to respond to Alice's order.
 We assume that Bob knows hashlock and order details already (f.e. through using some public order book aggregator), but that is not significant in terms of our demo.
 
-Let's switch to Bob and go to *Respond to order* page:
+Let's switch to Bob and go to _Respond to order_ page:
 
 ![Respond to order page](screenshots/03.png)
 
-Here Bob inputs hashlock of the order he wants to respond to. 
+Here Bob inputs hashlock of the order he wants to respond to.
 Amount of ETH to be locked on Ethereum SC from Bob is automatically set from value in corresponding Ontology contract.
 
 Now both Alice and Bob can persuade that order was initiated correctly:
@@ -85,7 +89,7 @@ Refunding will only work if assets were not claimed by other party.
 Now that Bob responded to Alice's order, she should lock buyer Ontology address.
 It's a good idea to check order data first and verify, that appropriate amount of ETH was indeed locked.
 
-After making sure that amount of ETH is sufficient, Alice goes to *Lock buyer address* page:
+After making sure that amount of ETH is sufficient, Alice goes to _Lock buyer address_ page:
 
 ![Lock buyer address](screenshots/06.png)
 
@@ -95,32 +99,30 @@ Now Bob should check order data and make that his Ontology address is correct.
 
 ![Check order data](screenshots/07.png)
 
-After that Bob goes to *Lock initiator address page* and locks Alice Ethereum address (inputted beforehand as well).
+After that Bob goes to _Lock initiator address page_ and locks Alice Ethereum address (inputted beforehand as well).
 
 ![Lock initiator address](screenshots/08.png)
 
-Exchange is almost completed. At this point revealing secret and claiming assets should take place. 
+Exchange is almost completed. At this point revealing secret and claiming assets should take place.
 
 Please note, that timelocks set in deployed testnet contracts are set to 10 seconds for purposes of quick proof of concept testing.
 In real DEX timelocks should be 24h and 48h, instead of 10 and 20 seconds in Ethereum and Ontology contracts respectively.
 It is also unsafe to perform claim after refund timelock time in a real exchange situation.
 
-
 Alice now ensures, that her Ethereum address is correct:
 
 ![Check order data](screenshots/09.png)
 
-She uses that address to send secret to Ethereum SC and claim her ETH from *Claim ETH* page:
+She uses that address to send secret to Ethereum SC and claim her ETH from _Claim ETH_ page:
 
 ![Claim ETH](screenshots/10.png)
 
-The secret was revealed, Bob can get this value from *Check order data* page:
+The secret was revealed, Bob can get this value from _Check order data_ page:
 
 ![Check order data](screenshots/11.png)
 
-Bob copies the value of secret and inputs it on *Claim ONT* page:
+Bob copies the value of secret and inputs it on _Claim ONT_ page:
 
 ![Claim ONT](screenshots/12.png)
 
 That's it, exchange was performed successfully.
-
