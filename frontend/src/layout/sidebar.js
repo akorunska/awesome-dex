@@ -11,16 +11,6 @@ const { Sider } = Layout;
 const Sidebar = withRouter(props => <RoutedSidebar {...props} />);
 
 class RoutedSidebar extends Component {
-  state = {
-    collapsed: false
-  };
-
-  handleCollapse = () => {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  };
-
   getSiderLayout = () => {
     const { user } = this.props;
 
@@ -42,12 +32,7 @@ class RoutedSidebar extends Component {
     const { pathname } = this.props.location === "" ? "/" : this.props.location;
 
     return (
-      <Sider
-        className="sidebar"
-        collapsible
-        collapsed={this.state.collapsed}
-        onCollapse={this.handleCollapse}
-      >
+      <Sider className="sidebar">
         <Menu theme="dark" mode="inline" selectedKeys={[pathname]}>
           {this.getSiderLayout()}
         </Menu>
