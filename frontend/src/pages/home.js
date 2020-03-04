@@ -24,6 +24,13 @@ class Home extends Component {
             </Descriptions.Item>
           </Descriptions>
         </Card>
+
+        <Card style={{ marginTop: 20 }}>
+          You can find complete usage instuctions in a README.md{" "}
+          <a href="https://github.com/akorunska/awesome-dex/blob/master/README.md">
+            here
+          </a>
+        </Card>
       </>
     );
   }
