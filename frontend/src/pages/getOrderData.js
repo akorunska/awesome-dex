@@ -111,9 +111,11 @@ class GetOrderData extends Component {
                 {ontologyContractOrderData.amountOfEthToBuy}
               </Descriptions.Item>
               <Descriptions.Item label="Refund timelock">
-                {new Date(
-                  ontologyContractOrderData.refundTimelock * 1000
-                ).toISOString()}
+                {ontologyContractOrderData.refundTimelock !== 0
+                  ? new Date(
+                      ontologyContractOrderData.refundTimelock * 1000
+                    ).toLocaleString()
+                  : "unset"}
               </Descriptions.Item>
             </Descriptions>
           </Card>
@@ -132,14 +134,18 @@ class GetOrderData extends Component {
                 {ethereumContractOrderData.amountEthLocked}
               </Descriptions.Item>
               <Descriptions.Item label="Refund timelock">
-                {new Date(
-                  ethereumContractOrderData.refundTimelock * 1000
-                ).toISOString()}
+                {ethereumContractOrderData.refundTimelock !== "0"
+                  ? new Date(
+                      ethereumContractOrderData.refundTimelock * 1000
+                    ).toLocaleString()
+                  : "unset"}
               </Descriptions.Item>
               <Descriptions.Item label="Claim timelock">
-                {new Date(
-                  ethereumContractOrderData.claimTimelock * 1000
-                ).toISOString()}
+                {ethereumContractOrderData.claimTimelock !== "0"
+                  ? new Date(
+                      ethereumContractOrderData.claimTimelock * 1000
+                    ).toLocaleString()
+                  : "unset"}
               </Descriptions.Item>
             </Descriptions>
           </Card>
