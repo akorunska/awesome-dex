@@ -1,15 +1,19 @@
 import React, { Component } from "react";
-import { Layout /* Menu */ } from "antd";
+import { Layout } from "antd";
 import styled, { css } from "styled-components";
 import Sidebar from "./sidebar";
 import AppHeader from "./header";
+import MetaMaskError from "./metamaskError";
+import Web3 from "web3";
+
+let web3 = new Web3(Web3.givenProvider);
 
 const MainContent = styled.main`
   flex: auto;
   min-height: 360px;
   position: relative;
 
-  ${p =>
+  ${(p) =>
     !p.noPadding &&
     css`
       position: static;
@@ -31,8 +35,17 @@ class AppLayout extends Component {
         <Layout className="main-layout">
           <AppHeader />
           <Layout style={{ height: "100vh" }}>
-            <Sidebar />
-            <MainContent>{children}</MainContent>
+            {web3.currentProvider &&
+            web3.currentProvider.isMetaMask === true ? (
+              <>
+                <Sidebar />
+                <MainContent>{children}</MainContent>
+              </>
+            ) : (
+              <MainContent>
+                <MetaMaskError></MetaMaskError>
+              </MainContent>
+            )}
           </Layout>
         </Layout>
       </>
